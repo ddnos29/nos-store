@@ -1,5 +1,7 @@
 {
+	"ignore": [".git", "node_modules/**/node_modules"],
 	"watch": ["src"],
-	"ext": ".ts,.js",
+	"legacyWatch": true,
+	"ext": ".ts",
 	"exec": "ts-node ./src/index.ts"
 }
