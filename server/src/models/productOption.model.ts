@@ -7,7 +7,7 @@ export interface IProductOption extends Document {
     quantity: number;
 }
 
-const ProductOptionSchema: Schema = new Schema(
+const ProductOptionSchema: Schema<IProductOption> = new Schema(
     {
         product_id: {
             type: Schema.Types.ObjectId,

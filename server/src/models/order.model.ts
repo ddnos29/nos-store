@@ -1,9 +1,9 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { model, Document, Schema, Types } from 'mongoose';
 
 import { IOrderDetail } from './orderDetail.model';
 
 export interface IOrder extends Document {
-    user_id: Schema.Types.ObjectId;
+    user_id: Types.ObjectId;
     phone: string;
     provine_id?: number;
     district_id?: number;
@@ -13,11 +13,11 @@ export interface IOrder extends Document {
     payment: string;
     coupon?: string;
     total: number;
-    orderDetails: IOrderDetail[];
+    orderDetail: IOrderDetail[] | Types.ObjectId;
     createAt: Date;
 }
 
-const OrderSchema: Schema = new Schema(
+const OrderSchema: Schema<IOrder> = new Schema(
     {
         user_id: {
             type: Schema.Types.ObjectId,
@@ -60,16 +60,15 @@ const OrderSchema: Schema = new Schema(
             type: Number,
             required: true,
         },
-        orderDetail: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'OrderDetail',
-            },
-        ],
+        createAt: {
+            type: Date,
+            default: Date.now,
+        },
+        orderDetail: { type: Schema.Types.ObjectId, ref: 'OrderDetail' },
     },
     {
         timestamps: true,
     }
 );
 
-export default mongoose.model<IOrder>('Order', OrderSchema);
+export default model<IOrder>('Order', OrderSchema);

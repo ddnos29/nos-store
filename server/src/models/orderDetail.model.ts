@@ -1,16 +1,16 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { model, Document, Schema, Types } from 'mongoose';
 
 export interface IOrderDetail extends Document {
-    order_id: Schema.Types.ObjectId;
-    product_id: Schema.Types.ObjectId;
-    product_option_id: Schema.Types.ObjectId;
+    order_id: Types.ObjectId;
+    product_id: Types.ObjectId;
+    product_option_id: Types.ObjectId;
     quantity: number;
     price: number;
     size: string;
     color: string;
 }
 
-const OrderDetailSchema: Schema = new Schema(
+const OrderDetailSchema: Schema<IOrderDetail> = new Schema(
     {
         order_id: {
             type: Schema.Types.ObjectId,
@@ -49,4 +49,4 @@ const OrderDetailSchema: Schema = new Schema(
     }
 );
 
-export const OrderDetail = mongoose.model<IOrderDetail>('OrderDetail', OrderDetailSchema);
+export const OrderDetail = model<IOrderDetail>('OrderDetail', OrderDetailSchema);

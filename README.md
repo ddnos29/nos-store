@@ -11,7 +11,6 @@
 - Expressjs
 - Nodejs
 - Docker
-
 ## Clone Repository
 ```
 git clone https://github.com/ddnos29/nos-store
@@ -27,4 +26,3 @@ MONGODB_CONNECTION_STRING=
 cd nos-store
 docker-compose up -d
 ```
-

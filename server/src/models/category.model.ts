@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
 import { removeVietnameseTones } from '../utils/removeVietnameseTones';
 
@@ -7,7 +7,7 @@ export interface ICategory extends Document {
     slug: string;
 }
 
-const CategorySchema: Schema = new Schema({
+const CategorySchema: Schema<ICategory> = new Schema({
     name: {
         type: String,
         required: true,
@@ -24,4 +24,4 @@ CategorySchema.pre('save', function (next) {
     next();
 });
 
-export default mongoose.model<ICategory>('Category', CategorySchema);
+export default model<ICategory>('Category', CategorySchema);

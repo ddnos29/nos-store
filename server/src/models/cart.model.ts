@@ -1,16 +1,16 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { model, Document, Schema, Types } from 'mongoose';
 
 export interface ICart extends Document {
-    user_id: Schema.Types.ObjectId;
-    product_id: Schema.Types.ObjectId;
-    product_option_id: Schema.Types.ObjectId;
+    user_id: Types.ObjectId;
+    product_id: Types.ObjectId;
+    product_option_id: Types.ObjectId;
     quantity: number;
     color: string;
     size: string;
     price: number;
 }
 
-const CartSchema: Schema = new Schema(
+const CartSchema: Schema<ICart> = new Schema(
     {
         user_id: {
             type: Schema.Types.ObjectId,
@@ -30,6 +30,7 @@ const CartSchema: Schema = new Schema(
         quantity: {
             type: Number,
             required: true,
+            min: 1,
         },
         color: {
             type: String,
@@ -38,6 +39,7 @@ const CartSchema: Schema = new Schema(
         size: {
             type: String,
             required: true,
+            
         },
         price: {
             type: Number,
@@ -49,4 +51,4 @@ const CartSchema: Schema = new Schema(
     }
 );
 
-export const Cart = mongoose.model<ICart>('Cart', CartSchema);
+export default model<ICart>('Cart', CartSchema);

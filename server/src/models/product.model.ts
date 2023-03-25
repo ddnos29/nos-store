@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { model, Schema, Document, Types } from 'mongoose';
 
 import { IProductImage } from './productImage.model';
 import { IProductOption } from './productOption.model';
@@ -7,17 +7,17 @@ export interface IProduct extends Document {
     name: string;
     price: number;
     description: string;
-    images: IProductImage[];
-    option: IProductOption[];
-    category_id: Schema.Types.ObjectId;
-    brand_id: Schema.Types.ObjectId;
+    images: Types.ObjectId | IProductImage[];
+    options: Types.ObjectId | IProductOption[];
+    category: Types.ObjectId;
+    brand: Types.ObjectId;
     slug: string;
     createdAt: Date;
     updatedAt: Date;
     status: boolean;
 }
 
-const ProductSchema: Schema = new Schema(
+const ProductSchema: Schema<IProduct> = new Schema(
     {
         name: {
             type: String,
@@ -73,4 +73,4 @@ const ProductSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<IProduct>('Product', ProductSchema);
+export default model<IProduct>('Product', ProductSchema);

@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import { model, Schema, Document } from 'mongoose';
 
 export interface ICoupon extends Document {
     name: string;
@@ -9,7 +9,7 @@ export interface ICoupon extends Document {
     status: boolean;
 }
 
-const CouponSchema: Schema = new Schema(
+const CouponSchema: Schema<ICoupon> = new Schema(
     {
         name: {
             type: String,
@@ -44,4 +44,4 @@ const CouponSchema: Schema = new Schema(
     }
 );
 
-export default mongoose.model<ICoupon>('Coupon', CouponSchema);
+export default model<ICoupon>('Coupon', CouponSchema);

@@ -7,7 +7,7 @@ export interface IProductImage extends Document {
     delete_url: string;
 }
 
-const ProductImageSchema: Schema = new Schema(
+const ProductImageSchema: Schema<IProductImage> = new Schema(
     {
         product_id: {
             type: Schema.Types.ObjectId,
