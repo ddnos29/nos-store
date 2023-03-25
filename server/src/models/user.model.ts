@@ -1,10 +1,12 @@
 import { model, Schema, Document, Types } from 'mongoose';
 
+import { ROLE } from "constants/Role";
+
 export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
-    role: string;
+    role: ROLE;
     phone: string;
     provine_id: number;
     district_id: number;
@@ -33,7 +35,8 @@ const UserSchema: Schema<IUser> = new Schema(
         },
         role: {
             type: String,
-            required: true,
+            default: ROLE.CUSTOMER,
+            enum: Object.values(ROLE),
         },
         phone: {
             type: String,

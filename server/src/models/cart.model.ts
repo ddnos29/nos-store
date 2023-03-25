@@ -1,9 +1,12 @@
 import { model, Document, Schema, Types } from 'mongoose';
 
+import { IProduct } from './product.model';
+import { IProductOption } from './productOption.model';
+
 export interface ICart extends Document {
     user_id: Types.ObjectId;
-    product_id: Types.ObjectId;
-    product_option_id: Types.ObjectId;
+    product_id: Types.ObjectId | IProduct;
+    product_option_id: Types.ObjectId | IProductOption;
     quantity: number;
     color: string;
     size: string;
@@ -39,7 +42,6 @@ const CartSchema: Schema<ICart> = new Schema(
         size: {
             type: String,
             required: true,
-            
         },
         price: {
             type: Number,

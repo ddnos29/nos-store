@@ -2,6 +2,10 @@ import { model, Document, Schema, Types } from 'mongoose';
 
 import { IOrderDetail } from './orderDetail.model';
 
+import { ORDERSTATUS } from 'constants/OrderStatus';
+import { PAYMENTSTATUS } from 'constants/paymentstatus';
+import { PAYMEMTTYPE } from 'constants/paymenttype';
+
 export interface IOrder extends Document {
     user_id: Types.ObjectId;
     phone: string;
@@ -9,8 +13,10 @@ export interface IOrder extends Document {
     district_id?: number;
     ward_id?: number;
     address: string;
-    status: string;
-    payment: string;
+    status: ORDERSTATUS;
+    shippingfee?: number;
+    paymentStatus: PAYMENTSTATUS;
+    paymentType: PAYMEMTTYPE;
     coupon?: string;
     total: number;
     orderDetail: IOrderDetail[] | Types.ObjectId;
@@ -47,11 +53,22 @@ const OrderSchema: Schema<IOrder> = new Schema(
         },
         status: {
             type: String,
-            required: true,
+            default: ORDERSTATUS.PENDING,
+            enum: Object.values(ORDERSTATUS),
         },
-        payment: {
+        paymentStatus: {
             type: String,
-            required: true,
+            default: PAYMENTSTATUS.UNPAID,
+            enum: Object.values(PAYMENTSTATUS),
+        },
+        paymentType: {
+            type: String,
+            default: PAYMEMTTYPE.COD,
+            enum: Object.values(PAYMEMTTYPE),
+        },
+        shippingfee: {
+            type: Number,
+            default: 0,
         },
         coupon: {
             type: String,

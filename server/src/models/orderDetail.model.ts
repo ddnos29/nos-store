@@ -1,13 +1,15 @@
 import { model, Document, Schema, Types } from 'mongoose';
 
+import { IProductOption } from "./productOption.model";
+
 export interface IOrderDetail extends Document {
     order_id: Types.ObjectId;
     product_id: Types.ObjectId;
-    product_option_id: Types.ObjectId;
+    product_option_id: Types.ObjectId | IProductOption;
     quantity: number;
-    price: number;
-    size: string;
-    color: string;
+    price?: number;
+    size?: string;
+    color?: string;
 }
 
 const OrderDetailSchema: Schema<IOrderDetail> = new Schema(
@@ -33,15 +35,12 @@ const OrderDetailSchema: Schema<IOrderDetail> = new Schema(
         },
         price: {
             type: Number,
-            required: true,
         },
         size: {
             type: String,
-            required: true,
         },
         color: {
             type: String,
-            required: true,
         },
     },
     {
