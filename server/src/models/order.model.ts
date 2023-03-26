@@ -2,9 +2,9 @@ import { model, Document, Schema, Types } from 'mongoose';
 
 import { IOrderDetail } from './orderDetail.model';
 
-import { ORDERSTATUS } from 'constants/OrderStatus';
-import { PAYMENTSTATUS } from 'constants/paymentstatus';
-import { PAYMEMTTYPE } from 'constants/paymenttype';
+import { ORDERSTATUS } from 'constants/enum';
+import { PAYMENTSTATUS } from 'constants/enum';
+import { PAYMEMTTYPE } from 'constants/enum';
 
 export interface IOrder extends Document {
     user_id: Types.ObjectId;

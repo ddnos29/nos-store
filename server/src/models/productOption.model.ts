@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-import { SIZE } from 'constants/Size';
+import { SIZE } from 'constants/enum';
 
 export interface IProductOption extends Document {
     product_id: Schema.Types.ObjectId;

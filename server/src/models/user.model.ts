@@ -1,6 +1,7 @@
 import { model, Schema, Document, Types } from 'mongoose';
+import bcrypt from 'bcrypt';
 
-import { ROLE } from "constants/Role";
+import { ROLE } from 'constants/enum';
 
 export interface IUser extends Document {
     name: string;
@@ -8,12 +9,11 @@ export interface IUser extends Document {
     password: string;
     role: ROLE;
     phone: string;
-    provine_id: number;
-    district_id: number;
-    ward_id: number;
+    provine_id?: number;
+    district_id?: number;
+    ward_id?: number;
     address: string;
     avatar: string;
-    refeshToken: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -45,15 +45,12 @@ const UserSchema: Schema<IUser> = new Schema(
         },
         provine_id: {
             type: Number,
-            required: true,
         },
         district_id: {
             type: Number,
-            required: true,
         },
         ward_id: {
             type: Number,
-            required: true,
         },
         address: {
             type: String,
@@ -62,9 +59,9 @@ const UserSchema: Schema<IUser> = new Schema(
         avatar: {
             type: String,
         },
-        refeshToken: {
+        /*         refeshToken: {
             type: String,
-        },
+        }, */
         createdAt: {
             type: Date,
             default: Date.now,
@@ -78,5 +75,19 @@ const UserSchema: Schema<IUser> = new Schema(
         timestamps: true,
     }
 );
+
+// hash password before save
+UserSchema.pre<IUser>('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
+    } else {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(this.password, salt);
+
+        this.password = hash;
+        return next();
+    }
+});
+
 
 export default model<IUser>('User', UserSchema);
