@@ -10,15 +10,22 @@ services:
          MONGO_INITDB_ROOT_USERNAME: root
          MONGO_INITDB_ROOT_PASSWORD: root
 
+   redis:
+      image: redis:alpine
+      ports:
+         - '6379:6379'
+      volumes:
+         - /data:/data
+
    server:
       build: ./server
       container_name: nos-store-server
       volumes:
          - ./server:/app
-#         - /app/node_modules
       ports:
          - '3000:3000'
       env_file:
          - ./server/.env
       depends_on:
          - mongodb
+         - redis
