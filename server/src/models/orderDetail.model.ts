@@ -48,4 +48,4 @@ const OrderDetailSchema: Schema<IOrderDetail> = new Schema(
     }
 );
 
-export const OrderDetail = model<IOrderDetail>('OrderDetail', OrderDetailSchema);
+export const OrderDetailModel = model<IOrderDetail>('OrderDetail', OrderDetailSchema);

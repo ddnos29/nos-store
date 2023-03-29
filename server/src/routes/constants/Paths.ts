@@ -11,7 +11,7 @@ const Paths = {
         Login: '/login',
         Logout: '/logout',
         Register: '/register',
-        Refresh: '/refresh',
+        Refresh: '/refresh-token',
     },
     User: {
         Base: '/user',

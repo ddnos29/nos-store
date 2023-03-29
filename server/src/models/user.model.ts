@@ -1,7 +1,5 @@
 import { model, Schema, Document, Types } from 'mongoose';
-import bcrypt from 'bcrypt';
-
-import { ROLE } from 'constants/enum';
+import { ROLE } from '../constants/enum';
 
 export interface IUser extends Document {
     name: string;
@@ -76,18 +74,4 @@ const UserSchema: Schema<IUser> = new Schema(
     }
 );
 
-// hash password before save
-UserSchema.pre<IUser>('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
-    } else {
-        const salt = await bcrypt.genSalt(10);
-        const hash = await bcrypt.hash(this.password, salt);
-
-        this.password = hash;
-        return next();
-    }
-});
-
-
-export default model<IUser>('User', UserSchema);
+export const UserModel = model<IUser>('User', UserSchema);

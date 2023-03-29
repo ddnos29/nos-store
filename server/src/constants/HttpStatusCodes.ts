@@ -1,383 +1,689 @@
-/* eslint-disable max-len */
-
-/**
- * Hypertext Transfer Protocol (HTTP) response status codes.
- * @see {@link https://en.wikipedia.org/wiki/List_of_HTTP_status_codes}
- */
-enum HttpStatusCodes {
-
+export enum REASON_PHRASES {
     /**
-     * The server has received the request headers and the client should proceed to send the request body
-     * (in the case of a request for which a body needs to be sent; for example, a POST request).
-     * Sending a large request body to a server after a request has been rejected for inappropriate headers would be inefficient.
-     * To have a server check the request's headers, a client must send Expect: 100-continue as a header in its initial request
-     * and receive a 100 Continue status code in response before sending the body. The response 417 Expectation Failed indicates the request should not be continued.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.3
+     *
+     * The request has been received but not yet acted upon. It is non-committal, meaning that there is no way in HTTP to later send an asynchronous response indicating the outcome of processing the request. It is intended for cases where another process or server handles the request, or for batch processing.
+     */
+    ACCEPTED = 'Accepted',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.3
+     *
+     * This error response means that the server, while working as a gateway to get a response needed to handle the request, got an invalid response.
+     */
+    BAD_GATEWAY = 'Bad Gateway',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.1
+     *
+     * This response means that server could not understand the request due to invalid syntax.
+     */
+    BAD_REQUEST = 'Bad Request',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.8
+     *
+     * This response is sent when a request conflicts with the current state of the server.
+     */
+    CONFLICT = 'Conflict',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.2.1
+     *
+     * This interim response indicates that everything so far is OK and that the client should continue with the request or ignore it if it is already finished.
+     */
+    CONTINUE = 'Continue',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.2
+     *
+     * The request has succeeded and a new resource has been created as a result of it. This is typically the response sent after a PUT request.
+     */
+    CREATED = 'Created',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.14
+     *
+     * This response code means the expectation indicated by the Expect request header field can't be met by the server.
+     */
+    EXPECTATION_FAILED = 'Expectation Failed',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.5
+     *
+     * The request failed due to failure of a previous request.
+     */
+    FAILED_DEPENDENCY = 'Failed Dependency',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.3
+     *
+     * The client does not have access rights to the content, i.e. they are unauthorized, so server is rejecting to give proper response. Unlike 401, the client's identity is known to the server.
+     */
+    FORBIDDEN = 'Forbidden',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.5
+     *
+     * This error response is given when the server is acting as a gateway and cannot get a response in time.
+     */
+    GATEWAY_TIMEOUT = 'Gateway Timeout',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.9
+     *
+     * This response would be sent when the requested content has been permenantly deleted from server, with no forwarding address. Clients are expected to remove their caches and links to the resource. The HTTP specification intends this status code to be used for "limited-time, promotional services". APIs should not feel compelled to indicate resources that have been deleted with this status code.
+     */
+    GONE = 'Gone',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.6
+     *
+     * The HTTP version used in the request is not supported by the server.
+     */
+    HTTP_VERSION_NOT_SUPPORTED = 'HTTP Version Not Supported',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2324#section-2.3.2
+     *
+     * Any attempt to brew coffee with a teapot should result in the error code "418 I'm a teapot". The resulting entity body MAY be short and stout.
+     */
+    IM_A_TEAPOT = "I'm a teapot",
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.6
+     *
+     * The 507 (Insufficient Storage) status code means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request. This condition is considered to be temporary. If the request which received this status code was the result of a user action, the request MUST NOT be repeated until it is requested by a separate user action.
+     */
+    INSUFFICIENT_SPACE_ON_RESOURCE = 'Insufficient Space on Resource',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.6
+     *
+     * The server has an internal configuration error= the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process.
+     */
+    INSUFFICIENT_STORAGE = 'Insufficient Storage',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.1
+     *
+     * The server encountered an unexpected condition that prevented it from fulfilling the request.
+     */
+    INTERNAL_SERVER_ERROR = 'Internal Server Error',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.10
+     *
+     * The server rejected the request because the Content-Length header field is not defined and the server requires it.
+     */
+    LENGTH_REQUIRED = 'Length Required',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.4
+     *
+     * The resource that is being accessed is locked.
+     */
+    LOCKED = 'Locked',
+    /**
+     * @deprecated
+     * Official Documentation @ https=//tools.ietf.org/rfcdiff?difftype=--hwdiff&url2=draft-ietf-webdav-protocol-06.txt
+     *
+     * A deprecated response used by the Spring Framework when a method has failed.
+     */
+    METHOD_FAILURE = 'Method Failure',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.5
+     *
+     * The request method is known by the server but has been disabled and cannot be used. For example, an API may forbid DELETE-ing a resource. The two mandatory methods, GET and HEAD, must never be disabled and should not return this error code.
+     */
+    METHOD_NOT_ALLOWED = 'Method Not Allowed',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.2
+     *
+     * This response code means that URI of requested resource has been changed. Probably, new URI would be given in the response.
+     */
+    MOVED_PERMANENTLY = 'Moved Permanently',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.3
+     *
+     * This response code means that URI of requested resource has been changed temporarily. New changes in the URI might be made in the future. Therefore, this same URI should be used by the client in future requests.
+     */
+    MOVED_TEMPORARILY = 'Moved Temporarily',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.2
+     *
+     * A Multi-Status response conveys information about multiple resources in situations where multiple status codes might be appropriate.
+     */
+    MULTI_STATUS = 'Multi-Status',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.1
+     *
+     * The request has more than one possible responses. User-agent or user should choose one of them. There is no standardized way to choose one of the responses.
+     */
+    MULTIPLE_CHOICES = 'Multiple Choices',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-6
+     *
+     * The 511 status code indicates that the client needs to authenticate to gain network access.
+     */
+    NETWORK_AUTHENTICATION_REQUIRED = 'Network Authentication Required',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.5
+     *
+     * There is no content to send for this request, but the headers may be useful. The user-agent may update its cached headers for this resource with the new ones.
+     */
+    NO_CONTENT = 'No Content',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.4
+     *
+     * This response code means returned meta-information set is not exact set as available from the origin server, but collected from a local or a third party copy. Except this condition, 200 OK response should be preferred instead of this response.
+     */
+    NON_AUTHORITATIVE_INFORMATION = 'Non Authoritative Information',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.6
+     *
+     * This response is sent when the web server, after performing server-driven content negotiation, doesn't find any content following the criteria given by the user agent.
+     */
+    NOT_ACCEPTABLE = 'Not Acceptable',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.4
+     *
+     * The server can not find requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This response code is probably the most famous one due to its frequent occurence on the web.
+     */
+    NOT_FOUND = 'Not Found',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.2
+     *
+     * The request method is not supported by the server and cannot be handled. The only methods that servers are required to support (and therefore that must not return this code) are GET and HEAD.
+     */
+    NOT_IMPLEMENTED = 'Not Implemented',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7232#section-4.1
+     *
+     * This is used for caching purposes. It is telling to client that response has not been modified. So, client can continue to use same cached version of response.
+     */
+    NOT_MODIFIED = 'Not Modified',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.1
+     *
+     * The request has succeeded. The meaning of a success varies depending on the HTTP method=
+     * GET= The resource has been fetched and is transmitted in the message body.
+     * HEAD= The entity headers are in the message body.
+     * POST= The resource describing the result of the action is transmitted in the message body.
+     * TRACE= The message body contains the request message as received by the server
+     */
+    OK = 'OK',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7233#section-4.1
+     *
+     * This response code is used because of range header sent by the client to separate download into multiple streams.
+     */
+    PARTIAL_CONTENT = 'Partial Content',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.2
+     *
+     * This response code is reserved for future use. Initial aim for creating this code was using it for digital payment systems however this is not used currently.
+     */
+    PAYMENT_REQUIRED = 'Payment Required',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7538#section-3
+     *
+     * This means that the resource is now permanently located at another URI, specified by the Location= HTTP Response header. This has the same semantics as the 301 Moved Permanently HTTP response code, with the exception that the user agent must not change the HTTP method used= if a POST was used in the first request, a POST must be used in the second request.
+     */
+    PERMANENT_REDIRECT = 'Permanent Redirect',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7232#section-4.2
+     *
+     * The client has indicated preconditions in its headers which the server does not meet.
+     */
+    PRECONDITION_FAILED = 'Precondition Failed',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-3
+     *
+     * The origin server requires the request to be conditional. Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
+     */
+    PRECONDITION_REQUIRED = 'Precondition Required',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.1
+     *
+     * This code indicates that the server has received and is processing the request, but no response is available yet.
+     */
+    PROCESSING = 'Processing',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7235#section-3.2
+     *
+     * This is similar to 401 but authentication is needed to be done by a proxy.
+     */
+    PROXY_AUTHENTICATION_REQUIRED = 'Proxy Authentication Required',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-5
+     *
+     * The server is unwilling to process the request because its header fields are too large. The request MAY be resubmitted after reducing the size of the request header fields.
+     */
+    REQUEST_HEADER_FIELDS_TOO_LARGE = 'Request Header Fields Too Large',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.7
+     *
+     * This response is sent on an idle connection by some servers, even without any previous request by the client. It means that the server would like to shut down this unused connection. This response is used much more since some browsers, like Chrome, Firefox 27+, or IE9, use HTTP pre-connection mechanisms to speed up surfing. Also note that some servers merely shut down the connection without sending this message.
+     */
+    REQUEST_TIMEOUT = 'Request Timeout',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.11
+     *
+     * Request entity is larger than limits defined by server; the server might close the connection or return an Retry-After header field.
+     */
+    REQUEST_TOO_LONG = 'Request Entity Too Large',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.12
+     *
+     * The URI requested by the client is longer than the server is willing to interpret.
+     */
+    REQUEST_URI_TOO_LONG = 'Request-URI Too Long',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7233#section-4.4
+     *
+     * The range specified by the Range header field in the request can't be fulfilled; it's possible that the range is outside the size of the target URI's data.
+     */
+    REQUESTED_RANGE_NOT_SATISFIABLE = 'Requested Range Not Satisfiable',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.6
+     *
+     * This response code is sent after accomplishing request to tell user agent reset document view which sent this request.
+     */
+    RESET_CONTENT = 'Reset Content',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.4
+     *
+     * Server sent this response to directing client to get requested resource to another URI with an GET request.
+     */
+    SEE_OTHER = 'See Other',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.4
+     *
+     * The server is not ready to handle the request. Common causes are a server that is down for maintenance or that is overloaded. Note that together with this response, a user-friendly page explaining the problem should be sent. This responses should be used for temporary conditions and the Retry-After= HTTP header should, if possible, contain the estimated time before the recovery of the service. The webmaster must also take care about the caching-related headers that are sent along with this response, as these temporary condition responses should usually not be cached.
+     */
+    SERVICE_UNAVAILABLE = 'Service Unavailable',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.2.2
+     *
+     * This code is sent in response to an Upgrade request header by the client, and indicates the protocol the server is switching too.
+     */
+    SWITCHING_PROTOCOLS = 'Switching Protocols',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.7
+     *
+     * Server sent this response to directing client to get requested resource to another URI with same method that used prior request. This has the same semantic than the 302 Found HTTP response code, with the exception that the user agent must not change the HTTP method used= if a POST was used in the first request, a POST must be used in the second request.
+     */
+    TEMPORARY_REDIRECT = 'Temporary Redirect',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-4
+     *
+     * The user has sent too many requests in a given amount of time ("rate limiting").
+     */
+    TOO_MANY_REQUESTS = 'Too Many Requests',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7235#section-3.1
+     *
+     * Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
+     */
+    UNAUTHORIZED = 'Unauthorized',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7725
+     *
+     * The user-agent requested a resource that cannot legally be provided, such as a web page censored by a government.
+     */
+    UNAVAILABLE_FOR_LEGAL_REASONS = 'Unavailable For Legal Reasons',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.3
+     *
+     * The request was well-formed but was unable to be followed due to semantic errors.
+     */
+    UNPROCESSABLE_ENTITY = 'Unprocessable Entity',
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.13
+     *
+     * The media format of the requested data is not supported by the server, so the server is rejecting the request.
+     */
+    UNSUPPORTED_MEDIA_TYPE = 'Unsupported Media Type',
+    /**
+     * @deprecated
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.6
+     *
+     * Was defined in a previous version of the HTTP specification to indicate that a requested response must be accessed by a proxy. It has been deprecated due to security concerns regarding in-band configuration of a proxy.
+     */
+    USE_PROXY = 'Use Proxy',
+    /**
+     * Official Documentation @ https=//datatracker.ietf.org/doc/html/rfc7540#section-9.1.2
+     *
+     * Defined in the specification of HTTP/2 to indicate that a server is not able to produce a response for the combination of scheme and authority that are included in the request URI.
+     */
+    MISDIRECTED_REQUEST = 'Misdirected Request',
+}
+
+export enum STATUS_CODE {
+    /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.2.1
+     *
+     * This interim response indicates that everything so far is OK and that the client should continue with the request or ignore it if it is already finished.
      */
     CONTINUE = 100,
-
     /**
-     * The requester has asked the server to switch protocols and the server has agreed to do so.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.2.2
+     *
+     * This code is sent in response to an Upgrade request header by the client, and indicates the protocol the server is switching too.
      */
     SWITCHING_PROTOCOLS = 101,
-
     /**
-     * A WebDAV request may contain many sub-requests involving file operations, requiring a long time to complete the request.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.1
+     *
      * This code indicates that the server has received and is processing the request, but no response is available yet.
-     * This prevents the client from timing out and assuming the request was lost.
      */
     PROCESSING = 102,
-
     /**
-     * Standard response for successful HTTP requests.
-     * The actual response will depend on the request method used.
-     * In a GET request, the response will contain an entity corresponding to the requested resource.
-     * In a POST request, the response will contain an entity describing or containing the result of the action.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.1
+     *
+     * The request has succeeded. The meaning of a success varies depending on the HTTP method=
+     * GET= The resource has been fetched and is transmitted in the message body.
+     * HEAD= The entity headers are in the message body.
+     * POST= The resource describing the result of the action is transmitted in the message body.
+     * TRACE= The message body contains the request message as received by the server
      */
     OK = 200,
-
     /**
-     * The request has been fulfilled, resulting in the creation of a new resource.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.2
+     *
+     * The request has succeeded and a new resource has been created as a result of it. This is typically the response sent after a PUT request.
      */
     CREATED = 201,
-
     /**
-     * The request has been accepted for processing, but the processing has not been completed.
-     * The request might or might not be eventually acted upon, and may be disallowed when processing occurs.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.3
+     *
+     * The request has been received but not yet acted upon. It is non-committal, meaning that there is no way in HTTP to later send an asynchronous response indicating the outcome of processing the request. It is intended for cases where another process or server handles the request, or for batch processing.
      */
     ACCEPTED = 202,
-
     /**
-     * SINCE HTTP/1.1
-     * The server is a transforming proxy that received a 200 OK from its origin,
-     * but is returning a modified version of the origin's response.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.4
+     *
+     * This response code means returned meta-information set is not exact set as available from the origin server, but collected from a local or a third party copy. Except this condition, 200 OK response should be preferred instead of this response.
      */
     NON_AUTHORITATIVE_INFORMATION = 203,
-
     /**
-     * The server successfully processed the request and is not returning any content.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.5
+     *
+     * There is no content to send for this request, but the headers may be useful. The user-agent may update its cached headers for this resource with the new ones.
      */
     NO_CONTENT = 204,
-
     /**
-     * The server successfully processed the request, but is not returning any content.
-     * Unlike a 204 response, this response requires that the requester reset the document view.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.3.6
+     *
+     * This response code is sent after accomplishing request to tell user agent reset document view which sent this request.
      */
     RESET_CONTENT = 205,
-
     /**
-     * The server is delivering only part of the resource (byte serving) due to a range header sent by the client.
-     * The range header is used by HTTP clients to enable resuming of interrupted downloads,
-     * or split a download into multiple simultaneous streams.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7233#section-4.1
+     *
+     * This response code is used because of range header sent by the client to separate download into multiple streams.
      */
     PARTIAL_CONTENT = 206,
-
     /**
-     * The message body that follows is an XML message and can contain a number of separate response codes,
-     * depending on how many sub-requests were made.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.2
+     *
+     * A Multi-Status response conveys information about multiple resources in situations where multiple status codes might be appropriate.
      */
     MULTI_STATUS = 207,
-
     /**
-     * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response,
-     * and are not being included again.
-     */
-    ALREADY_REPORTED = 208,
-
-    /**
-     * The server has fulfilled a request for the resource,
-     * and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
-     */
-    IM_USED = 226,
-
-    /**
-     * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
-     * For example, this code could be used to present multiple video format options,
-     * to list files with different filename extensions, or to suggest word-sense disambiguation.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.1
+     *
+     * The request has more than one possible responses. User-agent or user should choose one of them. There is no standardized way to choose one of the responses.
      */
     MULTIPLE_CHOICES = 300,
-
     /**
-     * This and all future requests should be directed to the given URI.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.2
+     *
+     * This response code means that URI of requested resource has been changed. Probably, new URI would be given in the response.
      */
     MOVED_PERMANENTLY = 301,
-
     /**
-     * This is an example of industry practice contradicting the standard.
-     * The HTTP/1.0 specification (RFC 1945) required the client to perform a temporary redirect
-     * (the original describing phrase was "Moved Temporarily"), but popular browsers implemented 302
-     * with the functionality of a 303 See Other. Therefore, HTTP/1.1 added status codes 303 and 307
-     * to distinguish between the two behaviours. However, some Web applications and frameworks
-     * use the 302 status code as if it were the 303.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.3
+     *
+     * This response code means that URI of requested resource has been changed temporarily. New changes in the URI might be made in the future. Therefore, this same URI should be used by the client in future requests.
      */
-    FOUND = 302,
-
+    MOVED_TEMPORARILY = 302,
     /**
-     * SINCE HTTP/1.1
-     * The response to the request can be found under another URI using a GET method.
-     * When received in response to a POST (or PUT/DELETE), the client should presume that
-     * the server has received the data and should issue a redirect with a separate GET message.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.4
+     *
+     * Server sent this response to directing client to get requested resource to another URI with an GET request.
      */
     SEE_OTHER = 303,
-
     /**
-     * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
-     * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7232#section-4.1
+     *
+     * This is used for caching purposes. It is telling to client that response has not been modified. So, client can continue to use same cached version of response.
      */
     NOT_MODIFIED = 304,
-
     /**
-     * SINCE HTTP/1.1
-     * The requested resource is available only through a proxy, the address for which is provided in the response.
-     * Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
+     * @deprecated
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.6
+     *
+     * Was defined in a previous version of the HTTP specification to indicate that a requested response must be accessed by a proxy. It has been deprecated due to security concerns regarding in-band configuration of a proxy.
      */
     USE_PROXY = 305,
-
     /**
-     * No longer used. Originally meant "Subsequent requests should use the specified proxy."
-     */
-    SWITCH_PROXY = 306,
-
-    /**
-     * SINCE HTTP/1.1
-     * In this case, the request should be repeated with another URI; however, future requests should still use the original URI.
-     * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
-     * For example, a POST request should be repeated using another POST request.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.4.7
+     *
+     * Server sent this response to directing client to get requested resource to another URI with same method that used prior request. This has the same semantic than the 302 Found HTTP response code, with the exception that the user agent must not change the HTTP method used= if a POST was used in the first request, a POST must be used in the second request.
      */
     TEMPORARY_REDIRECT = 307,
-
     /**
-     * The request and all future requests should be repeated using another URI.
-     * 307 and 308 parallel the behaviors of 302 and 301, but do not allow the HTTP method to change.
-     * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7538#section-3
+     *
+     * This means that the resource is now permanently located at another URI, specified by the Location= HTTP Response header. This has the same semantics as the 301 Moved Permanently HTTP response code, with the exception that the user agent must not change the HTTP method used= if a POST was used in the first request, a POST must be used in the second request.
      */
     PERMANENT_REDIRECT = 308,
-
     /**
-     * The server cannot or will not process the request due to an apparent client error
-     * (e.g., malformed request syntax, too large size, invalid request message framing, or deceptive request routing).
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.1
+     *
+     * This response means that server could not understand the request due to invalid syntax.
      */
     BAD_REQUEST = 400,
-
     /**
-     * Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet
-     * been provided. The response must include a WWW-Authenticate header field containing a challenge applicable to the
-     * requested resource. See Basic access authentication and Digest access authentication. 401 semantically means
-     * "unauthenticated",i.e. the user does not have the necessary credentials.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7235#section-3.1
+     *
+     * Although the HTTP standard specifies "unauthorized", semantically this response means "unauthenticated". That is, the client must authenticate itself to get the requested response.
      */
     UNAUTHORIZED = 401,
-
     /**
-     * Reserved for future use. The original intention was that this code might be used as part of some form of digital
-     * cash or micro payment scheme, but that has not happened, and this code is not usually used.
-     * Google Developers API uses this status if a particular developer has exceeded the daily limit on requests.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.2
+     *
+     * This response code is reserved for future use. Initial aim for creating this code was using it for digital payment systems however this is not used currently.
      */
     PAYMENT_REQUIRED = 402,
-
     /**
-     * The request was valid, but the server is refusing action.
-     * The user might not have the necessary permissions for a resource.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.3
+     *
+     * The client does not have access rights to the content, i.e. they are unauthorized, so server is rejecting to give proper response. Unlike 401, the client's identity is known to the server.
      */
     FORBIDDEN = 403,
-
     /**
-     * The requested resource could not be found but may be available in the future.
-     * Subsequent requests by the client are permissible.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.4
+     *
+     * The server can not find requested resource. In the browser, this means the URL is not recognized. In an API, this can also mean that the endpoint is valid but the resource itself does not exist. Servers may also send this response instead of 403 to hide the existence of a resource from an unauthorized client. This response code is probably the most famous one due to its frequent occurence on the web.
      */
     NOT_FOUND = 404,
-
     /**
-     * A request method is not supported for the requested resource;
-     * for example, a GET request on a form that requires data to be presented via POST, or a PUT request on a read-only resource.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.5
+     *
+     * The request method is known by the server but has been disabled and cannot be used. For example, an API may forbid DELETE-ing a resource. The two mandatory methods, GET and HEAD, must never be disabled and should not return this error code.
      */
     METHOD_NOT_ALLOWED = 405,
-
     /**
-     * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.6
+     *
+     * This response is sent when the web server, after performing server-driven content negotiation, doesn't find any content following the criteria given by the user agent.
      */
     NOT_ACCEPTABLE = 406,
-
     /**
-     * The client must first authenticate itself with the proxy.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7235#section-3.2
+     *
+     * This is similar to 401 but authentication is needed to be done by a proxy.
      */
     PROXY_AUTHENTICATION_REQUIRED = 407,
-
     /**
-     * The server timed out waiting for the request.
-     * According to HTTP specifications:
-     * "The client did not produce a request within the time that the server was prepared to wait. The client MAY repeat the request without modifications at any later time."
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.7
+     *
+     * This response is sent on an idle connection by some servers, even without any previous request by the client. It means that the server would like to shut down this unused connection. This response is used much more since some browsers, like Chrome, Firefox 27+, or IE9, use HTTP pre-connection mechanisms to speed up surfing. Also note that some servers merely shut down the connection without sending this message.
      */
     REQUEST_TIMEOUT = 408,
-
     /**
-     * Indicates that the request could not be processed because of conflict in the request,
-     * such as an edit conflict between multiple simultaneous updates.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.8
+     *
+     * This response is sent when a request conflicts with the current state of the server.
      */
     CONFLICT = 409,
-
     /**
-     * Indicates that the resource requested is no longer available and will not be available again.
-     * This should be used when a resource has been intentionally removed and the resource should be purged.
-     * Upon receiving a 410 status code, the client should not request the resource in the future.
-     * Clients such as search engines should remove the resource from their indices.
-     * Most use cases do not require clients and search engines to purge the resource, and a "404 Not Found" may be used instead.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.9
+     *
+     * This response would be sent when the requested content has been permenantly deleted from server, with no forwarding address. Clients are expected to remove their caches and links to the resource. The HTTP specification intends this status code to be used for "limited-time, promotional services". APIs should not feel compelled to indicate resources that have been deleted with this status code.
      */
     GONE = 410,
-
     /**
-     * The request did not specify the length of its content, which is required by the requested resource.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.10
+     *
+     * The server rejected the request because the Content-Length header field is not defined and the server requires it.
      */
     LENGTH_REQUIRED = 411,
-
     /**
-     * The server does not meet one of the preconditions that the requester put on the request.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7232#section-4.2
+     *
+     * The client has indicated preconditions in its headers which the server does not meet.
      */
     PRECONDITION_FAILED = 412,
-
     /**
-     * The request is larger than the server is willing or able to process. Previously called "Request Entity Too Large".
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.11
+     *
+     * Request entity is larger than limits defined by server; the server might close the connection or return an Retry-After header field.
      */
-    PAYLOAD_TOO_LARGE = 413,
-
+    REQUEST_TOO_LONG = 413,
     /**
-     * The URI provided was too long for the server to process. Often the result of too much data being encoded as a query-string of a GET request,
-     * in which case it should be converted to a POST request.
-     * Called "Request-URI Too Long" previously.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.12
+     *
+     * The URI requested by the client is longer than the server is willing to interpret.
      */
-    URI_TOO_LONG = 414,
-
+    REQUEST_URI_TOO_LONG = 414,
     /**
-     * The request entity has a media type which the server or resource does not support.
-     * For example, the client uploads an image as image/svg+xml, but the server requires that images use a different format.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.13
+     *
+     * The media format of the requested data is not supported by the server, so the server is rejecting the request.
      */
     UNSUPPORTED_MEDIA_TYPE = 415,
-
     /**
-     * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
-     * For example, if the client asked for a part of the file that lies beyond the end of the file.
-     * Called "Requested Range Not Satisfiable" previously.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7233#section-4.4
+     *
+     * The range specified by the Range header field in the request can't be fulfilled; it's possible that the range is outside the size of the target URI's data.
      */
-    RANGE_NOT_SATISFIABLE = 416,
-
+    REQUESTED_RANGE_NOT_SATISFIABLE = 416,
     /**
-     * The server cannot meet the requirements of the Expect request-header field.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.5.14
+     *
+     * This response code means the expectation indicated by the Expect request header field can't be met by the server.
      */
     EXPECTATION_FAILED = 417,
-
     /**
-     * This code was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol,
-     * and is not expected to be implemented by actual HTTP servers. The RFC specifies this code should be returned by
-     * teapots requested to brew coffee. This HTTP status is used as an Easter egg in some websites, including Google.com.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2324#section-2.3.2
+     *
+     * Any attempt to brew coffee with a teapot should result in the error code "418 I'm a teapot". The resulting entity body MAY be short and stout.
      */
-    I_AM_A_TEAPOT = 418,
-
+    IM_A_TEAPOT = 418,
     /**
-     * The request was directed at a server that is not able to produce a response (for example because a connection reuse).
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.6
+     *
+     * The 507 (Insufficient Storage) status code means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request. This condition is considered to be temporary. If the request which received this status code was the result of a user action, the request MUST NOT be repeated until it is requested by a separate user action.
+     */
+    INSUFFICIENT_SPACE_ON_RESOURCE = 419,
+    /**
+     * @deprecated
+     * Official Documentation @ https=//tools.ietf.org/rfcdiff?difftype=--hwdiff&url2=draft-ietf-webdav-protocol-06.txt
+     *
+     * A deprecated response used by the Spring Framework when a method has failed.
+     */
+    METHOD_FAILURE = 420,
+    /**
+     * Official Documentation @ https=//datatracker.ietf.org/doc/html/rfc7540#section-9.1.2
+     *
+     * Defined in the specification of HTTP/2 to indicate that a server is not able to produce a response for the combination of scheme and authority that are included in the request URI.
      */
     MISDIRECTED_REQUEST = 421,
-
     /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.3
+     *
      * The request was well-formed but was unable to be followed due to semantic errors.
      */
     UNPROCESSABLE_ENTITY = 422,
-
     /**
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.4
+     *
      * The resource that is being accessed is locked.
      */
     LOCKED = 423,
-
     /**
-     * The request failed due to failure of a previous request (e.g., a PROPPATCH).
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.5
+     *
+     * The request failed due to failure of a previous request.
      */
     FAILED_DEPENDENCY = 424,
-
     /**
-     * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
-     */
-    UPGRADE_REQUIRED = 426,
-
-    /**
-     * The origin server requires the request to be conditional.
-     * Intended to prevent "the 'lost update' problem, where a client
-     * GETs a resource's state, modifies it, and PUTs it back to the server,
-     * when meanwhile a third party has modified the state on the server, leading to a conflict."
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-3
+     *
+     * The origin server requires the request to be conditional. Intended to prevent the 'lost update' problem, where a client GETs a resource's state, modifies it, and PUTs it back to the server, when meanwhile a third party has modified the state on the server, leading to a conflict.
      */
     PRECONDITION_REQUIRED = 428,
-
     /**
-     * The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-4
+     *
+     * The user has sent too many requests in a given amount of time ("rate limiting").
      */
     TOO_MANY_REQUESTS = 429,
-
     /**
-     * The server is unwilling to process the request because either an individual header field,
-     * or all the header fields collectively, are too large.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-5
+     *
+     * The server is unwilling to process the request because its header fields are too large. The request MAY be resubmitted after reducing the size of the request header fields.
      */
     REQUEST_HEADER_FIELDS_TOO_LARGE = 431,
-
     /**
-     * A server operator has received a legal demand to deny access to a resource or to a set of resources
-     * that includes the requested resource. The code 451 was chosen as a reference to the novel Fahrenheit 451.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7725
+     *
+     * The user-agent requested a resource that cannot legally be provided, such as a web page censored by a government.
      */
     UNAVAILABLE_FOR_LEGAL_REASONS = 451,
-
     /**
-     * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.1
+     *
+     * The server encountered an unexpected condition that prevented it from fulfilling the request.
      */
     INTERNAL_SERVER_ERROR = 500,
-
     /**
-     * The server either does not recognize the request method, or it lacks the ability to fulfill the request.
-     * Usually this implies future availability (e.g., a new feature of a web-service API).
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.2
+     *
+     * The request method is not supported by the server and cannot be handled. The only methods that servers are required to support (and therefore that must not return this code) are GET and HEAD.
      */
     NOT_IMPLEMENTED = 501,
-
     /**
-     * The server was acting as a gateway or proxy and received an invalid response from the upstream server.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.3
+     *
+     * This error response means that the server, while working as a gateway to get a response needed to handle the request, got an invalid response.
      */
     BAD_GATEWAY = 502,
-
     /**
-     * The server is currently unavailable (because it is overloaded or down for maintenance).
-     * Generally, this is a temporary state.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.4
+     *
+     * The server is not ready to handle the request. Common causes are a server that is down for maintenance or that is overloaded. Note that together with this response, a user-friendly page explaining the problem should be sent. This responses should be used for temporary conditions and the Retry-After= HTTP header should, if possible, contain the estimated time before the recovery of the service. The webmaster must also take care about the caching-related headers that are sent along with this response, as these temporary condition responses should usually not be cached.
      */
     SERVICE_UNAVAILABLE = 503,
-
     /**
-     * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.5
+     *
+     * This error response is given when the server is acting as a gateway and cannot get a response in time.
      */
     GATEWAY_TIMEOUT = 504,
-
     /**
-     * The server does not support the HTTP protocol version used in the request
+     * Official Documentation @ https=//tools.ietf.org/html/rfc7231#section-6.6.6
+     *
+     * The HTTP version used in the request is not supported by the server.
      */
     HTTP_VERSION_NOT_SUPPORTED = 505,
-
     /**
-     * Transparent content negotiation for the request results in a circular reference.
-     */
-    VARIANT_ALSO_NEGOTIATES = 506,
-
-    /**
-     * The server is unable to store the representation needed to complete the request.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc2518#section-10.6
+     *
+     * The server has an internal configuration error= the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process.
      */
     INSUFFICIENT_STORAGE = 507,
-
     /**
-     * The server detected an infinite loop while processing the request.
+     * Official Documentation @ https=//tools.ietf.org/html/rfc6585#section-6
+     *
+     * The 511 status code indicates that the client needs to authenticate to gain network access.
      */
-    LOOP_DETECTED = 508,
-
-    /**
-     * Further extensions to the request are required for the server to fulfill it.
-     */
-    NOT_EXTENDED = 510,
-
-    /**
-     * The client needs to authenticate to gain network access.
-     * Intended for use by intercepting proxies used to control access to the network (e.g., "captive portals" used
-     * to require agreement to Terms of Service before granting full Internet access via a Wi-Fi hotspot).
-     */
-    NETWORK_AUTHENTICATION_REQUIRED = 511
+    NETWORK_AUTHENTICATION_REQUIRED = 511,
 }
-
-export default HttpStatusCodes;

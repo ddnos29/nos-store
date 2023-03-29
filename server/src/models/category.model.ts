@@ -24,4 +24,4 @@ CategorySchema.pre('save', function (next) {
     next();
 });
 
-export default model<ICategory>('Category', CategorySchema);
+export const CategoryModel =  model<ICategory>('Category', CategorySchema);

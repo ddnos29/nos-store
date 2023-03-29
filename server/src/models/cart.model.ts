@@ -53,4 +53,4 @@ const CartSchema: Schema<ICart> = new Schema(
     }
 );
 
-export default model<ICart>('Cart', CartSchema);
+export const CartModel = model<ICart>('Cart', CartSchema);

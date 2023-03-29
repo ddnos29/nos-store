@@ -32,4 +32,4 @@ const ProductImageSchema: Schema<IProductImage> = new Schema(
     }
 );
 
-export const ProductImage = mongoose.model<IProductImage>('ProductImage', ProductImageSchema);
+export const ProductImageModel = mongoose.model<IProductImage>('ProductImage', ProductImageSchema);

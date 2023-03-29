@@ -14,7 +14,7 @@ export const signAccessToken = (payload: ITokenPayload): Promise<any> => {
             payload,
             `${process.env.JWT_ACCESS_TOKEN_SECRET}`,
             {
-                expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRES_IN}`,
+                expiresIn: `${process.env.JWT_ACCESS_TOKEN_EXPIRATION}`,
             },
             (err, token) => {
                 if (err) reject(err);
@@ -30,7 +30,7 @@ export const signRefreshToken = (payload: ITokenPayload): Promise<any> => {
             payload,
             `${process.env.JWT_REFRESH_TOKEN_SECRET}`,
             {
-                expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRES_IN}`,
+                expiresIn: `${process.env.JWT_REFRESH_TOKEN_EXPIRATION}`,
             },
             (err, token) => {
                 if (err) reject(err);
