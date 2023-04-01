@@ -4,6 +4,7 @@ export enum ORDERSTATUS {
     DELIVERED = 'Đã giao hàng',
     CANCELLED = 'Đã hủy',
     DELIVEREDFAIL = 'Giao hàng thất bại',
+    DELETED = 'Đã xóa',
 }
 
 export enum PAYMENTSTATUS {

@@ -1,3 +1,5 @@
+//eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
 export const removeVietnameseTones = (str: string = ''): string => {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
@@ -23,6 +25,11 @@ export const removeVietnameseTones = (str: string = ''): string => {
     str = str.trim();
     // Remove punctuations
     // Bỏ dấu câu, kí tự đặc biệt
-    str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, ' ');
-    return str.replace(/ /g, '-').toLowerCase() /* + `-${Math.floor(Date.now() + Math.random())}` */;
+    str = str.replace(
+        /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g,
+        ' '
+    );
+    return str
+        .replace(/ /g, '-')
+        .toLowerCase() /* + `-${Math.floor(Date.now() + Math.random())}` */;
 };

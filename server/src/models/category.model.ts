@@ -14,7 +14,6 @@ const CategorySchema: Schema<ICategory> = new Schema({
     },
     slug: {
         type: String,
-        required: true,
         default: '',
     },
 });
@@ -24,4 +23,4 @@ CategorySchema.pre('save', function (next) {
     next();
 });
 
-export const CategoryModel =  model<ICategory>('Category', CategorySchema);
+export const CategoryModel = model<ICategory>('Category', CategorySchema);

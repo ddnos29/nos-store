@@ -1,20 +1,21 @@
 import { model, Schema, Document, Types } from 'mongoose';
 
-import { IProductImage } from './productImage.model';
-import { IProductOption } from './productOption.model';
+import { IProductImage, ProductImageModel } from './productImage.model';
+import { IProductOption, ProductOptionModel } from './productOption.model';
 
 export interface IProduct extends Document {
     name: string;
     price: number;
     description: string;
-    images: Types.ObjectId | IProductImage[];
-    options: Types.ObjectId | IProductOption[];
+    images: [Types.ObjectId] | IProductImage[];
+    options: [Types.ObjectId] | IProductOption[];
     category: Types.ObjectId;
     brand: Types.ObjectId;
     slug: string;
     createdAt: Date;
     updatedAt: Date;
     status: boolean;
+    rating: number;
 }
 
 const ProductSchema: Schema<IProduct> = new Schema(
@@ -31,16 +32,20 @@ const ProductSchema: Schema<IProduct> = new Schema(
             type: String,
             required: true,
         },
-        images: {
-            type: Schema.Types.ObjectId,
-            ref: 'ProductImage',
-            required: true,
-        },
-        options: {
-            type: Schema.Types.ObjectId,
-            ref: 'ProductOption',
-            required: true,
-        },
+        images: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'ProductImage',
+                required: true,
+            },
+        ],
+        options: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'ProductOption',
+                required: true,
+            },
+        ],
         category: {
             type: Schema.Types.ObjectId,
             ref: 'Category',
@@ -53,7 +58,7 @@ const ProductSchema: Schema<IProduct> = new Schema(
         },
         slug: {
             type: String,
-            required: true,
+            default: '',
         },
         createdAt: {
             type: Date,
@@ -66,6 +71,10 @@ const ProductSchema: Schema<IProduct> = new Schema(
         status: {
             type: Boolean,
             default: true,
+        },
+        rating: {
+            type: Number,
+            default: 0,
         },
     },
     {

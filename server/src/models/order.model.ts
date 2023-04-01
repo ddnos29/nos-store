@@ -81,7 +81,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
             type: Date,
             default: Date.now,
         },
-        orderDetail: { type: Schema.Types.ObjectId, ref: 'OrderDetail' },
+        orderDetail: [{ type: Schema.Types.ObjectId, ref: 'OrderDetail' }],
     },
     {
         timestamps: true,

@@ -2,7 +2,7 @@ import { STATUS_CODE, REASON_PHRASES } from '../constants/HttpStatusCodes';
 
 export class ErrorResponse extends Error {
     status: number;
-    constructor(message: string, status: number = STATUS_CODE.INTERNAL_SERVER_ERROR) {
+    constructor(message: string, status: number = STATUS_CODE.BAD_REQUEST) {
         super(message);
         this.status = status;
     }
@@ -13,19 +13,37 @@ export class ErrorResponse extends Error {
 }
 
 export class ConflictRequestError extends ErrorResponse {
-    constructor(message: string = REASON_PHRASES.CONFLICT, statusCode: number = STATUS_CODE.CONFLICT) {
+    constructor(
+        message: string = REASON_PHRASES.CONFLICT,
+        statusCode: number = STATUS_CODE.CONFLICT
+    ) {
         super(message, statusCode);
     }
 }
 
 export class BadRequestError extends ErrorResponse {
-    constructor(message: string = REASON_PHRASES.BAD_REQUEST, statusCode: number = STATUS_CODE.BAD_REQUEST) {
+    constructor(
+        message: string = REASON_PHRASES.BAD_REQUEST,
+        statusCode: number = STATUS_CODE.BAD_REQUEST
+    ) {
         super(message, statusCode);
     }
 }
 
 export class AuthFailureError extends ErrorResponse {
-    constructor(message: string = REASON_PHRASES.UNAUTHORIZED, statusCode: number = STATUS_CODE.UNAUTHORIZED) {
+    constructor(
+        message: string = REASON_PHRASES.UNAUTHORIZED,
+        statusCode: number = STATUS_CODE.UNAUTHORIZED
+    ) {
+        super(message, statusCode);
+    }
+}
+
+export class NotFoundError extends ErrorResponse {
+    constructor(
+        message: string = REASON_PHRASES.NOT_FOUND,
+        statusCode: number = STATUS_CODE.NOT_FOUND
+    ) {
         super(message, statusCode);
     }
 }

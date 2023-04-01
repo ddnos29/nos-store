@@ -28,6 +28,7 @@ const ProductOptionSchema: Schema<IProductOption> = new Schema(
         quantity: {
             type: Number,
             required: true,
+            default: 0,
             min: 0,
         },
     },
@@ -36,4 +37,4 @@ const ProductOptionSchema: Schema<IProductOption> = new Schema(
     }
 );
 
-export const ProductOption = mongoose.model<IProductOption>('ProductOption', ProductOptionSchema);
+export const ProductOptionModel = mongoose.model<IProductOption>('ProductOption', ProductOptionSchema);

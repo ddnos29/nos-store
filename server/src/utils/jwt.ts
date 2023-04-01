@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import { ROLE } from 'constants/enum';
+import { ROLE } from '../constants/enum';
 
 export interface ITokenPayload {
     userId: string;

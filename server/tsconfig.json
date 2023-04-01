@@ -3,16 +3,14 @@
         "target": "ES6",
         "module": "commonjs",
         "moduleResolution": "node",
-        "baseUrl": "./src",
+        "baseUrl": "./",
         "outDir": "./dist",
         "sourceMap": true,
         "strict": true,
         "noImplicitAny": false,
-        "esModuleInterop": true,
-        "paths": {
-            "@/*": ["./*"]
-        }
+        "esModuleInterop": true
     },
     "include": ["src/**/*.ts", "src/**/**/*.ts"],
-    "exclude": ["node_modules"]
+    "exclude": ["node_modules"],
+    "files": ["./src/types/express/index.d.ts"]
 }

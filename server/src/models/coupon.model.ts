@@ -24,19 +24,24 @@ const CouponSchema: Schema<ICoupon> = new Schema(
         percent: {
             type: Number,
             required: true,
-            default: 0,
-            min: 0,
+            default: 1,
+            min: 1,
             max: 100,
         },
         amount: {
             type: Number,
             required: true,
-            default: 0,
+            default: 1000,
             min: 0,
+        },
+        status: {
+            type: Boolean,
+            default: true,
         },
         expireDate: {
             type: Date,
             required: true,
+            default: () => new Date(+new Date() + 7 * 24 * 60 * 60 * 1000), // exprire in 7 days
         },
     },
     {

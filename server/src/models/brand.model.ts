@@ -12,7 +12,6 @@ const BrandSchema: Schema<IBrand> = new Schema({
     },
     slug: {
         type: String,
-        required: true,
         default: '',
     },
 });

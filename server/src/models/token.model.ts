@@ -1,20 +1,24 @@
 import { model, Schema, Types, Document } from 'mongoose';
 
 export interface IToken extends Document {
-    userId: Types.ObjectId;
+    user: Types.ObjectId;
+    refreshTokenUsed: Array<string>;
     refreshToken: string;
 }
 
 const TokenSchema: Schema<IToken> = new Schema(
     {
-        userId: {
+        user: {
             type: Schema.Types.ObjectId,
             required: true,
             ref: 'User',
         },
+        refreshTokenUsed: {
+            type: [String],
+            default: [],
+        },
         refreshToken: {
             type: String,
-            required: true,
         },
     },
     {
