@@ -1,14 +1,12 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
-import { authServices } from '../services/auth.service';
-import { SuccessResponse } from '../exceptions/success.response';
+import { authServices } from '@src/services/auth.service';
+import { SuccessResponse } from '@src/exceptions/success.response';
+import { BadRequestError } from '@src/exceptions/error.response';
 
-import { BadRequestError } from '../exceptions/error.response';
-
-import { STATUS_CODE } from '../constants/HttpStatusCodes';
-
-import { tokenService } from '../services/token.service';
+import { STATUS_CODE } from '@src/constants/HttpStatusCodes';
+import { tokenService } from '@src/services/token.service';
 
 export const authController = {
     login: async (req: Request, res: Response) => {

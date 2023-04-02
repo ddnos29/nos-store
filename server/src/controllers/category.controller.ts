@@ -25,7 +25,10 @@ export const categoryController = {
         } else {
             new SuccessResponse({
                 message: 'Cập nhật thương hiệu thành công',
-                data: await categoryServices.updateCategory(req.params.id, req.body),
+                data: await categoryServices.updateCategory(
+                    req.params.id,
+                    req.body
+                ),
             }).send(res);
         }
     },

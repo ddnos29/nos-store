@@ -3,5 +3,5 @@
 	"watch": ["src"],
 	"legacyWatch": true,
 	"ext": ".ts",
-	"exec": "ts-node ./src/index.ts"
+	"exec": "ts-node  ./src/index.ts"
 }

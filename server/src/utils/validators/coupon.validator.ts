@@ -12,7 +12,9 @@ export const couponValidator = {
             }
             return true;
         }),
-        check('percent').isInt({ min: 1, max: 100 }).withMessage('Phần trăm giảm giá phải từ 1% đến 100%'),
+        check('percent')
+            .isInt({ min: 1, max: 100 })
+            .withMessage('Phần trăm giảm giá phải từ 1% đến 100%'),
         check('aSố lượng mã giảm giá phải lớn hơn 0'),
         check('expireDate')
             .notEmpty()
@@ -36,15 +38,17 @@ export const couponValidator = {
                 return true;
             }),
         check('name').notEmpty().withMessage('Vui lòng nhập tên mã giảm giá'),
-        check('code').notEmpty().withMessage('Vui lòng nhập mã giảm giá'),
-        check('code').custom(async (code) => {
+        // check('code').notEmpty().withMessage('Vui lòng nhập mã giảm giá'),
+       /*  check('code').custom(async (code,{req}) => {
             const foundCode = await CouponModel.findOne({ code });
-            if (foundCode) {
+            if (foundCode && foundCode._id != id) {
                 throw new Error('Code mã giảm giá đã tồn tại');
             }
             return true;
-        }),
-        check('percent').isInt({ min: 1, max: 100 }).withMessage('Phần trăm giảm giá phải từ 1% đến 100%'),
+        }), */
+        check('percent')
+            .isInt({ min: 1, max: 100 })
+            .withMessage('Phần trăm giảm giá phải từ 1% đến 100%'),
         check('aSố lượng mã giảm giá phải lớn hơn 0'),
         check('expireDate')
             .notEmpty()
@@ -67,5 +71,16 @@ export const couponValidator = {
                 }
                 return true;
             }),
+    ],
+    useCoupon: [
+        check('code').notEmpty().withMessage('Vui lòng nhập mã giảm giá'),
+        check('code').custom(async (code) => {
+            const foundCoupon = await CouponModel.findOne({ code });
+            if (!foundCoupon) {
+                throw new Error('Mã giảm giá không tồn tại');
+            }
+
+            return true;
+        }),
     ],
 };

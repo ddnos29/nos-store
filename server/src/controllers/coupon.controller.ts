@@ -2,7 +2,7 @@ import { validationResult } from 'express-validator';
 
 import { BadRequestError } from '../exceptions/error.response';
 import { SuccessResponse } from '../exceptions/success.response';
-import { couponService } from 'src/services/coupon.service';
+import { couponService } from '@src/services/coupon.service';
 
 export const couponController = {
     createCoupon: async (req, res) => {
@@ -67,7 +67,7 @@ export const couponController = {
             throw new BadRequestError(errors.array()[0].msg);
         } else {
             new SuccessResponse({
-                message: 'Khóa mã giảm giá thành công',
+                message: 'Vô hiệu hóa mã giảm giá thành công',
                 data: (await couponService.disabledCoupon(req.params.id)) || {},
             }).send(res);
         }
@@ -80,7 +80,7 @@ export const couponController = {
         } else {
             new SuccessResponse({
                 message: 'Sử dụng mã giảm giá thành công',
-                data: await couponService.useCoupon(req.params.id),
+                data: await couponService.useCoupon(req.params.code),
             }).send(res);
         }
     },

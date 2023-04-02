@@ -20,6 +20,7 @@ export const asyncHandler = (fn: any) => {
 export const authentication = asyncHandler(async (req: IUserRequest, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
     console.log(token);
+
     if (!token) {
         throw new AuthFailureError('Bạn chưa đăng nhập');
     }
@@ -27,7 +28,6 @@ export const authentication = asyncHandler(async (req: IUserRequest, res: Respon
     const accessToken = token.split(' ')[1];
 
     const decoded = await verifyAccessToken(accessToken);
-
     if (!decoded) {
         throw new AuthFailureError('Invalid token');
     }

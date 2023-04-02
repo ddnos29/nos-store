@@ -37,15 +37,12 @@ const OrderSchema: Schema<IOrder> = new Schema(
         },
         provine_id: {
             type: Number,
-            required: true,
         },
         district_id: {
             type: Number,
-            required: true,
         },
         ward_id: {
             type: Number,
-            required: true,
         },
         address: {
             type: String,
@@ -72,6 +69,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
         },
         coupon: {
             type: String,
+            default: '',
         },
         total: {
             type: Number,

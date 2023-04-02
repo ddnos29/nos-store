@@ -8,9 +8,9 @@ export interface ICart extends Document {
     product_id: Types.ObjectId | IProduct;
     product_option_id: Types.ObjectId | IProductOption;
     quantity: number;
-    color: string;
-    size: string;
-    price: number;
+    color?: string;
+    size?: string;
+    price?: number;
 }
 
 const CartSchema: Schema<ICart> = new Schema(
@@ -32,20 +32,19 @@ const CartSchema: Schema<ICart> = new Schema(
         },
         quantity: {
             type: Number,
-            required: true,
             min: 1,
+            default: 1,
         },
         color: {
             type: String,
-            required: true,
+            default: '',
         },
         size: {
             type: String,
-            required: true,
+            default: '',
         },
         price: {
             type: Number,
-            required: true,
         },
     },
     {

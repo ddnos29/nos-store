@@ -1,10 +1,9 @@
 import { OrderModel } from 'src/models/order.model';
 import { OrderDetailModel } from '../models/orderDetail.model';
+import { PAYMENTSTATUS, PAYMEMTTYPE } from '../constants/enum';
 
 import { ProductModel } from '../models/product.model';
-
-import { PAYMENTSTATUS } from '../constants/enum';
-
+import { BadRequestError } from '../exceptions/error.response';
 export const orderService = {
     createOrder: async (
         userId,
@@ -14,39 +13,39 @@ export const orderService = {
             address,
             shipping_fee = 15000,
             coupon = '',
-            paymentStatus,
             paymentType,
         }
     ) => {
-        const total_price = products.reduce((total, product) => {
-            return total + product.price * product.quantity;
-        });
+        let total_price = 0;
+
+        for (let i = 0; i < products.length; i++) {
+            const foundProduct = await ProductModel.findById(products[i]._id);
+            if (!foundProduct) throw new BadRequestError('Product not found');
+            total_price += foundProduct.price * products[i].quantity;
+        }
+
         const total_quantity = products.reduce((total, product) => {
             return total + product.quantity;
         });
 
         const order_detail_lst: any[] = [];
 
-        const order = await OrderModel.create({
+        const order = await new OrderModel({
             user_id: userId,
             total: total_price,
             address,
             phone,
             shipping_fee,
             coupon,
-            paymentStatus,
-            paymentType,
+            paymentType: PAYMEMTTYPE[paymentType],
         });
 
         for (let i = 0; i < products.length; i++) {
-            const order_detail = await OrderDetailModel.create({
+            const order_detail = await new OrderDetailModel({
                 order_id: order._id,
                 product_id: products[i]._id,
                 quantity: products[i].quantity,
                 product_option_id: products[i].product_option_id,
-                price: products[i].price,
-                size: products[i].size,
-                color: products[i].color,
             });
             await order_detail_lst.push(order_detail);
         }
@@ -54,8 +53,9 @@ export const orderService = {
         order.orderDetail = await order_detail_lst.map(
             (order_detail) => order_detail._id
         );
-        await order.save();
+
         await OrderDetailModel.insertMany(order_detail_lst);
+        await order.save();
 
         return order;
     },
@@ -63,4 +63,9 @@ export const orderService = {
     deleteOrder: async (order) => {},
     getAllOrder: async () => {},
     getOrderById: async (id) => {},
+    getOrderByUserId: async (userId) => {
+        const orders = await OrderModel.find({ user_id: userId });
+
+        return orders;
+    },
 };

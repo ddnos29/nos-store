@@ -11,10 +11,10 @@ export const couponService = {
         });
         return coupon;
     },
-    updateCoupon: async (id, { name, code, percent, amount, expireDate }) => {
+    // can't update code
+    updateCoupon: async (id, { name, percent, amount, expireDate }) => {
         const coupon = await CouponModel.findByIdAndUpdate(id, {
             name,
-            code,
             percent,
             amount,
             expireDate,
@@ -39,8 +39,8 @@ export const couponService = {
         const conpon = await CouponModel.findById(id);
         return conpon;
     },
-    useCoupon: async (id) => {
-        const coupon = await CouponModel.findById(id);
+    useCoupon: async (code) => {
+        const coupon = await CouponModel.findOne({ code });
         if (!coupon) {
             throw new BadRequestError('Mã giảm giá không tồn tại');
         }

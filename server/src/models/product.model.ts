@@ -7,8 +7,8 @@ export interface IProduct extends Document {
     name: string;
     price: number;
     description: string;
-    images: [Types.ObjectId] | IProductImage[];
-    options: [Types.ObjectId] | IProductOption[];
+    images: Array<Types.ObjectId>;
+    options: Array<Types.ObjectId>;
     category: Types.ObjectId;
     brand: Types.ObjectId;
     slug: string;

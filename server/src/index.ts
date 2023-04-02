@@ -1,4 +1,3 @@
-
 import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
@@ -15,6 +14,8 @@ import brandRoute from './routes/brand.route';
 import categoryRoute from './routes/category.route';
 import productRoute from './routes/product.route';
 import couponRoute from './routes/coupon.route';
+import cartRoute from './routes/cart.route';
+import orderRoute from './routes/order.route';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -51,7 +52,8 @@ app.use('/api/brand', brandRoute);
 app.use('/api/category', categoryRoute);
 app.use('/api/product', productRoute);
 app.use('/api/coupon', couponRoute);
-
+app.use('/api/cart', cartRoute);
+app.use('/api/order', orderRoute);
 app.use((req, res, next) => {
     const error = new Error('Not found');
     res.status(404);

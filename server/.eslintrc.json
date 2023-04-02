@@ -8,7 +8,8 @@
         "plugin:node/recommended"
     ],
     "parserOptions": {
-        "project": "./tsconfig.json",
+        //"project": "./tsconfig.json", // if cd/nos-store/server
+        "project": "./server/tsconfig.json", // if cd/nos-store
         "sourceType": "module"
     },
     "rules": {
