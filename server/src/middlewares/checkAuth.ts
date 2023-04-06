@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthFailureError, BadRequestError } from '../exceptions/error.response';
+import {
+    AuthFailureError,
+    BadRequestError,
+} from '../exceptions/error.response';
 import { verifyAccessToken } from '../utils/jwt';
 import { ITokenPayload } from '../utils/jwt';
 
@@ -17,32 +20,38 @@ export const asyncHandler = (fn: any) => {
     };
 };
 
-export const authentication = asyncHandler(async (req: IUserRequest, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
-    console.log(token);
+export const authentication = asyncHandler(
+    async (req: IUserRequest, res: Response, next: NextFunction) => {
+        const token = req.headers.authorization;
 
-    if (!token) {
-        throw new AuthFailureError('Bạn chưa đăng nhập');
+        if (!token) {
+            throw new AuthFailureError('Bạn chưa đăng nhập');
+        }
+
+        const accessToken = token.split(' ')[1];
+
+        const decoded = await verifyAccessToken(accessToken).catch((err) => {
+            throw new AuthFailureError(err.message);
+        });
+
+        if (!decoded) {
+            throw new AuthFailureError('Invalid token');
+        }
+        const existUser = await UserModel.findById(decoded.userId);
+        if (!existUser) throw new AuthFailureError('User not found');
+
+        req.user = decoded;
+        next();
     }
+);
 
-    const accessToken = token.split(' ')[1];
+export const roleCheck = asyncHandler(
+    async (req: IUserRequest, res: Response, next: NextFunction) => {
+        const { role } = req.user;
+        if (role !== ROLE.ADMIN) {
+            throw new BadRequestError('Bạn không có quyền truy cập');
+        }
 
-    const decoded = await verifyAccessToken(accessToken);
-    if (!decoded) {
-        throw new AuthFailureError('Invalid token');
+        next();
     }
-    const existUser = await UserModel.findById(decoded.userId);
-    if (!existUser) throw new AuthFailureError('User not found');
-
-    req.user = decoded;
-    next();
-});
-
-export const roleCheck = asyncHandler(async (req: IUserRequest, res: Response, next: NextFunction) => {
-    const { role } = req.user;
-    if (role !== ROLE.ADMIN) {
-        throw new BadRequestError('Bạn không có quyền truy cập');
-    }
-
-    next();
-});
+);

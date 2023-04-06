@@ -2,7 +2,11 @@ import { TokenModel } from '../models/token.model';
 
 import { AuthFailureError } from '../exceptions/error.response';
 
-import { verifyRefreshToken, signAccessToken, signRefreshToken } from '../utils/jwt';
+import {
+    verifyRefreshToken,
+    signAccessToken,
+    signRefreshToken,
+} from '../utils/jwt';
 
 import { UserModel } from '../models/user.model';
 
@@ -21,7 +25,11 @@ export const tokenService = {
                     new: true,
                 };
 
-            const tokens = await TokenModel.findOneAndUpdate(filter, update, options);
+            const tokens = await TokenModel.findOneAndUpdate(
+                filter,
+                update,
+                options
+            );
 
             return tokens;
         } catch (error) {
@@ -35,15 +43,24 @@ export const tokenService = {
         }
         const foundTokenUse = await TokenModel.findOne({ refreshToken });
         if (!foundTokenUse) {
-            throw new AuthFailureError('Vui lòng đăng nhập lại');
+            throw new AuthFailureError(
+                'Không tìm thấy refresh-token vui lòng đăng nhập lại'
+            );
         }
 
-        const checkTokenUsed = await foundTokenUse.refreshTokenUsed.includes(refreshToken);
+        const checkTokenUsed = await foundTokenUse.refreshTokenUsed.includes(
+            refreshToken
+        );
         if (checkTokenUsed) {
-            throw new AuthFailureError('Some thing went wrong please login again');
+            throw new AuthFailureError(
+                'Some thing went wrong please login again'
+            );
         }
 
-        const decoded = await verifyRefreshToken(refreshToken);
+        const decoded = await verifyRefreshToken(refreshToken).catch((err) => {
+            throw new AuthFailureError(err.message);
+        });
+
         if (!decoded) {
             throw new AuthFailureError('Invalid refresh token');
         }
@@ -60,17 +77,18 @@ export const tokenService = {
             role: user.role,
         });
 
-        const newRefreshToken = await signRefreshToken({
+        /* const newRefreshToken = await signRefreshToken({
             userId: user._id,
         });
 
         foundTokenUse.refreshTokenUsed.push(refreshToken);
-        foundTokenUse.refreshToken = newRefreshToken;
+        foundTokenUse.refreshToken = newRefreshToken; */
+
         await foundTokenUse.save();
 
         return {
             access_token: newAccessToken,
-            refresh_token: newRefreshToken,
+            /* refresh_token: newRefreshToken, */
         };
     },
 };

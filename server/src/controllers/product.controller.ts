@@ -6,6 +6,7 @@ import { productServices } from '../services/product.service';
 
 export const productController = {
     createProduct: async (req, res) => {
+        console.log(req.files);
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             throw new BadRequestError(errors.array()[0].msg);

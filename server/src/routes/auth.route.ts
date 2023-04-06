@@ -6,10 +6,27 @@ const router = Router();
 
 router.post('/login', authValidator.login, asyncHandler(authController.login));
 
-router.post('/register', authValidator.register, asyncHandler(authController.register));
+router.post('/cookie', authValidator.login, (req, res) => {
+    res.cookie('test3', 'test3', {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000,
+    });
+    res.json('test');
+});
 
-router.get('/refresh-token', asyncHandler(authController.refreshToken));
+router.post(
+    '/register',
+    authValidator.register,
+    asyncHandler(authController.register)
+);
 
-router.get('/logout', authentication, asyncHandler(authController.logout));
+router.post('/refresh-token', asyncHandler(authController.refreshToken));
+
+router.delete(
+    '/logout',
+    /* authentication, */ asyncHandler(authController.logout)
+);
 
 export default router;

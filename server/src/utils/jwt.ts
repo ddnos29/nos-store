@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 
 import { ROLE } from '../constants/enum';
+import { AuthFailureError } from '@src/exceptions/error.response';
 
 export interface ITokenPayload {
     userId: string;
@@ -42,18 +43,26 @@ export const signRefreshToken = (payload: ITokenPayload): Promise<any> => {
 
 export const verifyAccessToken = (token: string): Promise<any> => {
     return new Promise<any>((resolve, reject) => {
-        jwt.verify(token, `${process.env.JWT_ACCESS_TOKEN_SECRET}`, (err, payload) => {
-            if (err) return reject(err);
-            resolve(payload);
-        });
+        jwt.verify(
+            token,
+            `${process.env.JWT_ACCESS_TOKEN_SECRET}`,
+            (err, payload) => {
+                if (err) return reject(err);
+                resolve(payload);
+            }
+        );
     });
 };
 
 export const verifyRefreshToken = (token: string): Promise<any> => {
     return new Promise<any>((resolve, reject) => {
-        jwt.verify(token, `${process.env.JWT_REFRESH_TOKEN_SECRET}`, (err, payload) => {
-            if (err) return reject(err);
-            resolve(payload);
-        });
+        jwt.verify(
+            token,
+            `${process.env.JWT_REFRESH_TOKEN_SECRET}`,
+            (err, payload) => {
+                if (err) return reject(err);
+                resolve(payload);
+            }
+        );
     });
 };

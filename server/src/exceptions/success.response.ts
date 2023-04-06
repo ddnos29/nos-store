@@ -25,18 +25,19 @@ export class SuccessResponse {
         res.status(this.statusCode).json(this);
     }
     sendCookie(res, cookie) {
-        res.cookie(cookie.name, cookie.value, cookie.options)
+        res.cookie(cookie.name, cookie.value, cookie.options);
+        res.setHeader('Set-Cookie', ['cookie_name=cookie_value']);
         return this.send(res);
     }
 
     clearCookie(res, cookie) {
-        res.clearCookie(cookie.name, cookie.options)
+        res.clearCookie(cookie.name, cookie.options);
         return this.send(res);
     }
 
     async clearCookieAndSend(res, cookie) {
-        await res.clearCookie(cookie.name, cookie.options)
-        await res.cookie(cookie.name, cookie.value, cookie.options)
+        await res.clearCookie(cookie.name, cookie.options);
+        await res.cookie(cookie.name, cookie.value, cookie.options);
         return this.send(res);
     }
 }

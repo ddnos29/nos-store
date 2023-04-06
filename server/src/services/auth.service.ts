@@ -99,12 +99,13 @@ export const authServices = {
         const foundTokenUse = await TokenModel.findOne({ refreshToken }).lean();
     },
 
-    logout: async (refreshToken) => {
+    logout: async ({ refreshToken }) => {
         if (refreshToken) {
             const delToken = await TokenModel.findOne({ refreshToken });
             if (!delToken) {
-                throw new AuthFailureError('Vui lòng đăng nhập lại');
+                return {};
             }
+            console.log(delToken.refreshTokenUsed);
             delToken.refreshTokenUsed.push(delToken.refreshToken);
             delToken.refreshToken = '';
             await delToken.save();

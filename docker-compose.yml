@@ -24,9 +24,11 @@ services:
          - ./server:/app
          - /app/node_modules/bcrypt/
       ports:
-         - '3000:3000'
+         - '4000:4000'
       env_file:
          - ./server/.env
+      environment:
+         - MONGODB_URI=mongodb://root:root@mongodb:27017/nos-store?authSource=admin
       depends_on:
          - mongodb
          - redis

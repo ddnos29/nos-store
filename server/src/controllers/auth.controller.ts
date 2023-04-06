@@ -23,10 +23,17 @@ export const authController = {
                 options: {
                     httpOnly: true,
                     secure: false,
-                    sameSite: 'None',
+                    sameSite: 'strict',
                     maxAge: 24 * 60 * 60 * 1000,
                 },
             });
+            /* res.cookie('test2', 'test2', {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000,
+            });
+            return res.json('test'); */
         }
     },
 
@@ -44,32 +51,28 @@ export const authController = {
     },
 
     refreshToken: async (req, res) => {
-        const result = await tokenService.handleToken(req.cookies);
+        const result = await tokenService.handleToken(req.body);
+
+        console.log('refreshToken:', req.body);
+
         new SuccessResponse({
             data: result.access_token,
-        }).clearCookieAndSend(res, {
-            name: 'refreshToken',
-            value: result.refresh_token,
-            options: {
-                httpOnly: true,
-                secure: false,
-                sameSite: 'None',
-                maxAge: 24 * 60 * 60 * 1000,
-            },
-        });
+        }).send(res);
     },
 
     logout: async (req, res) => {
         new SuccessResponse({
             message: 'Đăng xuất thành công',
+            data: await authServices.logout(req.body),
             statusCode: STATUS_CODE.NO_CONTENT,
-        }).clearCookie(res, {
+        }).send(res);
+        /* .clearCookie(res, {
             name: 'refreshToken',
             options: {
                 httpOnly: true,
                 sameSite: 'None',
                 secure: false,
             },
-        });
+        }); */
     },
 };

@@ -6,7 +6,7 @@ import compression from 'compression';
 import cors from 'cors';
 import morgan from 'morgan';
 import multer from 'multer';
-
+import  createError  from 'http-errors';
 //import route
 import testRoute from './routes/test.route';
 import authRoute from './routes/auth.route';
@@ -30,10 +30,11 @@ connect();
 
 app.use(
     cors({
+        origin: ['http://localhost:3000', 'http://localhost:3001'],
         credentials: true,
     })
 );
-
+app.set('trust proxy', 1);
 // app.use(multer.array());
 app.use(compression());
 app.use(cookieParser());
@@ -54,10 +55,14 @@ app.use('/api/product', productRoute);
 app.use('/api/coupon', couponRoute);
 app.use('/api/cart', cartRoute);
 app.use('/api/order', orderRoute);
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
     const error = new Error('Not found');
     res.status(404);
     next(error);
+}); */
+
+app.use(function (req, res, next) {
+    next(createError(404));
 });
 
 app.use((error, req, res, next) => {
