@@ -7,6 +7,7 @@ export const productValidator = {
         check('name', 'Tên sản phẩm không được để trống').notEmpty(),
         check('price', 'Giá sản phẩm không được để trống').notEmpty(),
         check('description', 'Mô tả sản phẩm không được để trống').notEmpty(),
+        check('gender', 'Giới tính sản phẩm không được để trống').notEmpty(),
         check('options')
             .exists()
             .withMessage('Vui lòng thêm tùy chọn sản phẩm')
@@ -19,13 +20,23 @@ export const productValidator = {
                 }
                 value.forEach((item) => {
                     if (!item.size || !item.quantity || !item.color) {
-                        throw new Error('Vui lòng nhập đầy kiểu sản phẩm (số lượng, màu, kích thước)');
+                        throw new Error(
+                            'Vui lòng nhập đầy kiểu sản phẩm (số lượng, màu, kích thước)'
+                        );
                     }
-                    if (item.size === '' || item.quantity === '' || item.color === '') {
-                        throw new Error('Vui lòng nhập đầy đủ kiểu sản phẩm (số lượng, màu, kích thước)');
+                    if (
+                        item.size === '' ||
+                        item.quantity === '' ||
+                        item.color === ''
+                    ) {
+                        throw new Error(
+                            'Vui lòng nhập đầy đủ kiểu sản phẩm (số lượng, màu, kích thước)'
+                        );
                     }
                     if (item.quantity < 0) {
-                        throw new Error('Số lượng sản phẩm không được nhỏ hơn 0');
+                        throw new Error(
+                            'Số lượng sản phẩm không được nhỏ hơn 0'
+                        );
                     }
                 });
                 return true;
@@ -70,13 +81,23 @@ export const productValidator = {
                 }
                 value.forEach((item) => {
                     if (!item.size || !item.quantity || !item.color) {
-                        throw new Error('Vui lòng nhập đầy kiểu sản phẩm (số lượng, màu, kích thước)');
+                        throw new Error(
+                            'Vui lòng nhập đầy kiểu sản phẩm (số lượng, màu, kích thước)'
+                        );
                     }
-                    if (item.size === '' || item.quantity === '' || item.color === '') {
-                        throw new Error('Vui lòng nhập đầy đủ kiểu sản phẩm (số lượng, màu, kích thước)');
+                    if (
+                        item.size === '' ||
+                        item.quantity === '' ||
+                        item.color === ''
+                    ) {
+                        throw new Error(
+                            'Vui lòng nhập đầy đủ kiểu sản phẩm (số lượng, màu, kích thước)'
+                        );
                     }
                     if (item.quantity < 0) {
-                        throw new Error('Số lượng sản phẩm không được nhỏ hơn 0');
+                        throw new Error(
+                            'Số lượng sản phẩm không được nhỏ hơn 0'
+                        );
                     }
                 });
                 return true;
@@ -103,5 +124,5 @@ export const productValidator = {
                 }
                 return true;
             }),
-    ],  
+    ],
 };

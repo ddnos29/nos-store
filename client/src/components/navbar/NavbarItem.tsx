@@ -66,7 +66,9 @@ export const NavbarItem = () => {
           >
             {/* Profile */}
             <MenuItem key="profile" onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">Thông tin cá nhân</Typography>
+              <Link href={'/profile'}>
+                <Typography textAlign="center">Thông tin cá nhân</Typography>
+              </Link>
             </MenuItem>
             {/* Logout */}
             <MenuItem key="logout" onClick={logout}>

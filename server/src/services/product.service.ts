@@ -4,11 +4,11 @@ import { ProductImageModel } from '../models/productImage.model';
 import { BadRequestError } from '../exceptions/error.response';
 
 import { uploadImage } from '../utils/uploadImage';
-import { SIZE } from '../constants/enum';
+import { SIZE, GENDER } from '../constants/enum';
 
 export const productServices = {
     createProduct: async (
-        { name, price, description, options, category, brand },
+        { name, price, description, options, category, brand, gender },
         files
     ) => {
         const foundProduct = await ProductModel.findOne(
@@ -28,6 +28,7 @@ export const productServices = {
             description,
             category,
             brand,
+            gender: GENDER[gender],
         });
         console.log(options);
         for (let i = 0; i < options.length; i++) {

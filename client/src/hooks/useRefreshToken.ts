@@ -21,7 +21,7 @@ export const useRefreshToken = () => {
     if (session) {
       session.user.accessToken = res?.data.data.accessToken;
     } else {
-      signOut();
+      signIn();
     }
   };
   return refreshToken;

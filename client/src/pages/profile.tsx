@@ -1,7 +1,7 @@
-import { DefaultLayout, LoginLayout } from '@/layouts';
+import { LoginLayout } from '@/layouts';
 
-export const ProfilePage = () => {
-  return <LoginLayout></LoginLayout>;
+const ProfilePage = () => {
+  return <LoginLayout title={'Thông tin cá nhân'}>test</LoginLayout>;
 };
 
 export default ProfilePage;

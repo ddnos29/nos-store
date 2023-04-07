@@ -8,9 +8,11 @@ import {
   Alert,
 } from '@mui/material';
 
+import { NextPageContext } from 'next';
 import { useState, useEffect } from 'react';
 import { AuthLayout } from '@/layouts';
 import { useForm } from 'react-hook-form';
+import { getSession } from 'next-auth/react';
 //import axios from '@/lib/axios';
 import axios from 'axios';
 
@@ -23,13 +25,20 @@ interface IFormInput {
   confirm_password?: string;
 }
 
-export const getServerSideProps = async () => {
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+  if (session?.user) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
   return {
-    props: {
-      title: 'Đăng ký',
-    },
+    props: {}, // will be passed to the page component as props
   };
-};
+}
 
 const RegisterPage = () => {
   const [error, setError] = useState<String | null>(null);

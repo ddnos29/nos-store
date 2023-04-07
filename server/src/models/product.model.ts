@@ -1,7 +1,6 @@
 import { model, Schema, Document, Types } from 'mongoose';
 
-import { IProductImage, ProductImageModel } from './productImage.model';
-import { IProductOption, ProductOptionModel } from './productOption.model';
+import { GENDER } from '@src/constants/enum';
 
 export interface IProduct extends Document {
     name: string;
@@ -12,6 +11,7 @@ export interface IProduct extends Document {
     category: Types.ObjectId;
     brand: Types.ObjectId;
     slug: string;
+    gender: string;
     createdAt: Date;
     updatedAt: Date;
     status: boolean;
@@ -67,6 +67,11 @@ const ProductSchema: Schema<IProduct> = new Schema(
         updatedAt: {
             type: Date,
             default: Date.now,
+        },
+        gender: {
+            type: String,
+            default: GENDER.GENERAL,
+            enum: Object.values(GENDER),
         },
         status: {
             type: Boolean,

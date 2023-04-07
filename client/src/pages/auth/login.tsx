@@ -16,8 +16,8 @@ import { useForm } from 'react-hook-form';
 
 import { useRouter } from 'next/router';
 
-import { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { signIn, getSession, useSession } from 'next-auth/react';
 
 interface IFormInput {
   email: string;
@@ -26,12 +26,11 @@ interface IFormInput {
 
 export async function getServerSideProps(context: NextPageContext) {
   const session = await getSession(context);
-  console.log(session);
-  if (session) {
+  if (session?.user) {
     return {
       redirect: {
         destination: '/',
-        permanent: true,
+        permanent: false,
       },
     };
   }
@@ -42,6 +41,13 @@ export async function getServerSideProps(context: NextPageContext) {
 
 const LoginPage = () => {
   const router = useRouter();
+  /*   const session = useSession();
+  useEffect(() => {
+    if (session.?user) {
+      console.log(session);
+      router.push('/');
+    }
+  }, [session]); */
 
   const [error, setError] = useState<String | null>(null);
   const {
