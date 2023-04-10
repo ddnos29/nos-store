@@ -5,7 +5,8 @@ import { Box, Toolbar, Typography } from '@mui/material';
 import Head from 'next/head';
 
 import { SideBar } from '@/components/sidebar/SideBar';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 interface LoginLayoutProps {
   children?: React.ReactNode;
   title?: string;
@@ -42,6 +43,8 @@ export const LoginLayout: FC<LoginLayoutProps> = ({
           }}
         >
           <Toolbar />
+          <ToastContainer />
+
           {children}
         </Box>
       </Box>

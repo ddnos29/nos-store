@@ -87,6 +87,7 @@ export const NavbarItem = () => {
           </Button>
         </Link>
       )}
+      <button onClick={() => console.log(session)}>session</button>
     </>
   );
 };

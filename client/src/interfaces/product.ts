@@ -5,8 +5,8 @@ import { SIZE } from '@/constants/enum';
 export interface IProduct {
   _id?: string;
   name: string;
-  brand: IBrand;
-  category: ICategory;
+  brand: IBrand | string;
+  category: ICategory | string;
   description: string;
   quantity?: number;
   price: number;

@@ -18,7 +18,9 @@ export const productServices = {
         if (foundProduct) {
             throw new BadRequestError('Sản phẩm đã tồn tại');
         }
-
+        if (files.length === 0) {
+            throw new BadRequestError('Vui lòng thêm ảnh sản phẩm');
+        }
         const listImages: any[] = [];
         const listOptions: any[] = [];
 

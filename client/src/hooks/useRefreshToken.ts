@@ -14,12 +14,10 @@ export const useRefreshToken = () => {
       .catch((err) => {
         if (err.response.status === 401) {
           console.log(err.response.data);
-          signOut();
         }
       });
-
     if (session) {
-      session.user.accessToken = res?.data.data.accessToken;
+      session.user.accessToken = res?.data.data;
     } else {
       signIn();
     }

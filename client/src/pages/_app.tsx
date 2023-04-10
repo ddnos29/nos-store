@@ -10,7 +10,7 @@ const roboto = Roboto({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider refetchInterval={60} refetchOnWindowFocus={false}>
       <main className={roboto.className}>
         <Component {...pageProps} />
       </main>

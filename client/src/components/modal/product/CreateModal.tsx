@@ -18,27 +18,32 @@ import { style } from '../style';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { IProduct, IBrand, ICategory } from '@/interfaces';
 
-import { ProductOption } from './ProductOption';
 import DeleteIcon from '@mui/icons-material/Delete';
+
+import useAxiosAuth from '@/hooks/useAxiosAuth';
+import { toast } from 'react-toastify';
 
 interface CreateModalProps {
   open: boolean;
   handleClose: () => void;
-  category: ICategory[];
-  brand: IBrand[];
+  categoryLst: ICategory[];
+  brandLst: IBrand[];
+}
+
+interface FormValues extends Omit<IProduct, 'category' | 'brand'> {
+  category: string;
+  brand: string;
 }
 
 export const CreateModal: FC<CreateModalProps> = ({
   open,
   handleClose,
-  category,
-  brand,
+  categoryLst,
+  brandLst,
 }) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagesUrl, setImagesUrl] = useState<string[]>([]);
-  const [option, setOption] = useState<any[]>([]);
-
-  const handleAddOption = () => {};
+  const axiosAuth = useAxiosAuth();
 
   // Show image when choose file
   const handleImages = (e: any) => {
@@ -48,14 +53,31 @@ export const CreateModal: FC<CreateModalProps> = ({
       URL.createObjectURL(file)
     );
     setImagesUrl((imagesUrl) => [...imagesUrl, ...urlArray]);
+    setImages((images) => [...images, ...e.target.files]);
+    /* Check Type images */
+    Array.from(e.target.files).map((file: File) => {
+      if (
+        file.type !== 'image/jpeg' &&
+        file.type !== 'image/png' &&
+        file.type !== 'image/jpg' &&
+        file.type !== 'image/gif' &&
+        file.type !== 'image/svg' &&
+        file.type !== 'image/webp'
+      ) {
+        alert('File không đúng định dạng');
+        setImagesUrl([]);
+        setImages([]);
+      }
+    });
   };
 
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
-  } = useForm<IProduct>({
+  } = useForm<FormValues>({
     defaultValues: {
       options: [
         {
@@ -72,8 +94,38 @@ export const CreateModal: FC<CreateModalProps> = ({
     name: 'options',
   });
 
-  const onSubmit = (data: IProduct) => {
-    console.log(data);
+  const onSubmit = (data: FormValues) => {
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('brand', data.brand);
+    formData.append('category', data.category);
+    formData.append('price', `${data.price}`);
+    formData.append('gender', data.gender);
+    formData.append('description', data.description);
+    for (let i = 0; i < images.length; i++) {
+      formData.append(`images`, images[i]);
+    }
+    for (let i = 0; i < data.options.length; i++) {
+      formData.append(`options[${i}][size]`, data.options[i].size);
+      formData.append(`options[${i}][color]`, data.options[i].color);
+      formData.append(`options[${i}][quantity]`, `${data.options[i].quantity}`);
+    }
+
+    axiosAuth
+      .post(`${process.env.HOST_URL}/api/product`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        reset();
+        setImages([]);
+        setImagesUrl([]);
+        toast.success(res.data.message);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error.message);
+      });
   };
 
   return (
@@ -107,20 +159,22 @@ export const CreateModal: FC<CreateModalProps> = ({
               <FormControl fullWidth>
                 <InputLabel id="brand-1">Hãng</InputLabel>
                 <Controller
-                  name="brand"
+                  name={'brand'}
                   control={control}
-                  rules={{ required: 'Vui lòng chọn hãn' }}
+                  rules={{ required: 'Vui lòng chọn hãng' }}
+                  defaultValue={''}
                   render={({ field }) => (
                     <Select
                       {...field}
                       label="Hãng"
+                      defaultValue=""
                       aria-labelledby="parent-modal-title"
                       aria-describedby="parent-modal-description"
                       sx={{
                         width: { md: '600px', xs: '400px' },
                       }}
                     >
-                      {brand.map((item) => (
+                      {brandLst.map((item) => (
                         <MenuItem key={item._id} value={item._id}>
                           {item.name}
                         </MenuItem>
@@ -135,21 +189,51 @@ export const CreateModal: FC<CreateModalProps> = ({
               <FormControl fullWidth>
                 <InputLabel id="category-1">Danh mục</InputLabel>
                 <Controller
-                  name="category"
+                  name={'category'}
+                  defaultValue={''}
                   control={control}
                   rules={{ required: 'Vui lòng chọn danh mục' }}
                   render={({ field }) => (
                     <Select
+                      {...field}
+                      defaultValue=""
                       label="Danh mục"
                       sx={{
                         width: { md: '600px', xs: '400px' },
                       }}
                     >
-                      {category.map((item) => (
+                      {categoryLst.map((item) => (
                         <MenuItem key={item._id} value={item._id}>
                           {item.name}
                         </MenuItem>
                       ))}
+                    </Select>
+                  )}
+                />
+              </FormControl>
+            </Grid>
+            {/* Gender */}
+            <Grid item>
+              <FormControl fullWidth>
+                <InputLabel id="gender-1">Giới tính</InputLabel>
+                <Controller
+                  name={'gender'}
+                  defaultValue={'GENERAL'}
+                  control={control}
+                  rules={{ required: 'Vui lòng chọn giới tính' }}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      label="Hãng"
+                      aria-labelledby="parent-modal-title"
+                      aria-describedby="parent-modal-description"
+                      sx={{
+                        width: { md: '600px', xs: '400px' },
+                      }}
+                    >
+                      <MenuItem value={'MALE'}>Nam</MenuItem>
+                      <MenuItem value={'FEMALE'}>Nữ</MenuItem>
+                      <MenuItem value={'GENERAL'}>Chung</MenuItem>
                     </Select>
                   )}
                 />
@@ -167,7 +251,7 @@ export const CreateModal: FC<CreateModalProps> = ({
                 {...register('price', {
                   required: 'Giá không được để trống',
                   min: {
-                    value: 0,
+                    value: 1,
                     message: 'Giá không được nhỏ hơn 0',
                   },
                 })}
@@ -210,7 +294,7 @@ export const CreateModal: FC<CreateModalProps> = ({
                       <Controller
                         name={`options.${index}.size`}
                         control={control}
-                        defaultValue=""
+                        defaultValue={''}
                         rules={{ required: 'Size Required' }}
                         render={({ field }) => (
                           <Select
@@ -235,7 +319,7 @@ export const CreateModal: FC<CreateModalProps> = ({
                       <Controller
                         name={`options.${index}.color`}
                         control={control}
-                        defaultValue=""
+                        defaultValue={''}
                         rules={{ required: 'Size Required' }}
                         render={({ field }) => (
                           <Select {...field} label="Màu sắc" sx={{ flex: 1 }}>

@@ -124,5 +124,26 @@ export const productValidator = {
                 }
                 return true;
             }),
+        check('images').custom(async (file, { req }) => {
+            if (!req.files) {
+                throw new Error('Vui lòng thêm ảnh');
+            } else {
+                if (!req.files[0]) {
+                    throw new Error('Vui lòng thêm ảnh');
+                }
+                console.log(req.files);
+                const filetypes = /jpeg|jpg|png|gif/;
+                req.files.forEach((file) => {
+                    if (!filetypes.test(file.mimetype)) {
+                        throw new Error(
+                            'Ảnh không hợp lệ! Chỉ cho phép upload ảnh png/jpg/jpeg/gif'
+                        );
+                    } else if (file.size > 1024 * 1024 * 8) {
+                        throw new Error('Ảnh không được quá 8MB');
+                    }
+                });
+            }
+            return true;
+        }),
     ],
 };

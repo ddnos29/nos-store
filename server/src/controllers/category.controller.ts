@@ -11,7 +11,7 @@ export const categoryController = {
             throw new BadRequestError(errors.array()[0].msg);
         } else {
             new SuccessResponse({
-                message: 'Thêm thương hiệu mới thành công',
+                message: 'Thêm danh mục mới thành công',
                 data: await categoryServices.createCategory(req.body),
                 statusCode: 201,
             }).send(res);
