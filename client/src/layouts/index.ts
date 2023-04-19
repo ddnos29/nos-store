@@ -1,3 +1,3 @@
 export * from './AuthLayout';
-export * from './DefaultLayout';
+export * from './layout';
 export * from './LoginLayout';

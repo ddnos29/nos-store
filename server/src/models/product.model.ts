@@ -1,6 +1,7 @@
 import { model, Schema, Document, Types } from 'mongoose';
 
 import { GENDER } from '@src/constants/enum';
+import { removeVietnameseTones } from '../utils/removeVietnameseTones';
 
 export interface IProduct extends Document {
     name: string;
@@ -86,5 +87,14 @@ const ProductSchema: Schema<IProduct> = new Schema(
         timestamps: true,
     }
 );
+
+/* ProductSchema.pre('find', function () {
+    this.getQuery().slug = removeVietnameseTones(this.getQuery().name);
+}); */
+
+ProductSchema.pre('save', function (next) {
+    this.slug = removeVietnameseTones(this.name) + '-' + this._id;
+    next();
+});
 
 export const ProductModel = model<IProduct>('Product', ProductSchema);

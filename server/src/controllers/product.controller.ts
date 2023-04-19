@@ -55,4 +55,24 @@ export const productController = {
             data: await productServices.getAllProducts(),
         }).send(res);
     },
+
+    getAllSlug: async (req, res) => {
+        new SuccessResponse({
+            message: 'Danh sách slug',
+            data: await productServices.getAllSlug(),
+        }).send(res);
+    },
+
+    getRelatedProducts: async (req, res) => {
+        new SuccessResponse({
+            message: 'Sản phẩm liên quan',
+            data: await productServices.getRelatedProducts(req.params.id),
+        }).send(res);
+    },
+    getTop12Products: async (req, res) => {
+        new SuccessResponse({
+            message: 'Sản phẩm bán chạy',
+            data: await productServices.getTop12Products(),
+        }).send(res);
+    },
 };

@@ -3,10 +3,7 @@ import { Box, CardMedia, useMediaQuery } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation, EffectFade } from 'swiper';
 
-import 'swiper/css';
-import 'swiper/css/effect-fade';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+
 
 export const Banner = () => {
   const images = [
@@ -15,7 +12,10 @@ export const Banner = () => {
     '/images/banner4.jpg',
   ];
   return (
-    <Box>
+    <Box
+    sx={{
+      marginBottom: '2rem',
+    }}>
       <Swiper
         slidesPerView={1}
         spaceBetween={0}

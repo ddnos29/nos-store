@@ -12,7 +12,13 @@ const router = Router();
 
 router.get('/', asyncHandler(productController.getAllProducts));
 
+router.get('/slug', asyncHandler(productController.getAllSlug));
+
+router.get('/top12', asyncHandler(productController.getTop12Products));
+
 router.get('/:id', asyncHandler(productController.getProductById));
+
+router.get('/related/:id', asyncHandler(productController.getRelatedProducts));
 
 router.post(
     '/create',

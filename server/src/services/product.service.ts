@@ -180,7 +180,54 @@ export const productServices = {
 
         return product;
     },
+    getAllSlug: async () => {
+        return await ProductModel.find({ status: true }).select('slug');
+    },
+    getRelatedProducts: async (id) => {
+        const product = await ProductModel.findOne({ _id: id, status: true });
+        if (!product) throw new BadRequestError('Sản phẩm không tồn tại');
 
+        return await ProductModel.find({
+            _id: { $ne: id },
+            category: product.category,
+            brand: product.brand,
+            status: true,
+        })
+            .populate('category')
+            .populate('brand')
+            .populate([
+                {
+                    path: 'images',
+                    model: 'ProductImage',
+                },
+            ])
+            .populate([
+                {
+                    path: 'options',
+                    model: 'ProductOption',
+                },
+            ])
+            .limit(6);
+    },
+    getTop12Products: async () => {
+        return await ProductModel.find({ status: true })
+            .populate('category')
+            .populate('brand')
+            .populate([
+                {
+                    path: 'images',
+                    model: 'ProductImage',
+                },
+            ])
+            .populate([
+                {
+                    path: 'options',
+                    model: 'ProductOption',
+                },
+            ])
+            .sort({ createdAt: -1 })
+            .limit(12);
+    },
     getProductByCategoryId: async (id) => {},
     getProductByBrandId: async (id) => {},
     getProuctByName: async (name) => {},

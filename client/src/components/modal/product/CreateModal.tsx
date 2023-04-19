@@ -12,8 +12,9 @@ import {
   ImageList,
   ImageListItem,
   IconButton,
-  Typography,
 } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 import { style } from '../style';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import { IProduct, IBrand, ICategory } from '@/interfaces';
@@ -43,6 +44,8 @@ export const CreateModal: FC<CreateModalProps> = ({
 }) => {
   const [images, setImages] = useState<File[]>([]);
   const [imagesUrl, setImagesUrl] = useState<string[]>([]);
+  const [loading, setLoading] = useState<Boolean>(false);
+
   const axiosAuth = useAxiosAuth();
 
   // Show image when choose file
@@ -110,7 +113,7 @@ export const CreateModal: FC<CreateModalProps> = ({
       formData.append(`options[${i}][color]`, data.options[i].color);
       formData.append(`options[${i}][quantity]`, `${data.options[i].quantity}`);
     }
-
+    setLoading(true);
     axiosAuth
       .post(`${process.env.HOST_URL}/api/product`, formData, {
         headers: {
@@ -122,9 +125,11 @@ export const CreateModal: FC<CreateModalProps> = ({
         setImages([]);
         setImagesUrl([]);
         toast.success(res.data.message);
+        setLoading(false);
       })
       .catch((err) => {
         toast.error(err.response.data.error.message);
+        setLoading(false);
       });
   };
 
@@ -419,9 +424,13 @@ export const CreateModal: FC<CreateModalProps> = ({
               )}
             </Grid>
             <Grid item>
-              <Button variant="contained" type="submit">
-                Thêm sản phẩm
-              </Button>
+              <LoadingButton
+                loading={loading}
+                variant="contained"
+                type="submit"
+              >
+                <span>Thêm sản phẩm</span>
+              </LoadingButton>
             </Grid>
           </Grid>
         </form>

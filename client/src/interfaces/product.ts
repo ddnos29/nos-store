@@ -14,6 +14,8 @@ export interface IProduct {
   images: IProductImage[] | any;
   options: IProductOption[] | any;
   gender: string;
+  rating?: number;
+  slug: string;
 }
 
 export interface IProductImage {

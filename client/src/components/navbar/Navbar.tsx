@@ -13,16 +13,15 @@ import {
   MenuItem,
 } from '@mui/material';
 
+import Link from 'next/link';
+
 import MenuIcon from '@mui/icons-material/Menu';
 
-import AdbIcon from '@mui/icons-material/Adb';
 import CheckroomIcon from '@mui/icons-material/Checkroom';
-
-
 
 import { NavbarItem } from './NavbarItem';
 
-const pages = ['Sản phẩm', 'Pricing', 'Blog'];
+const pages = [{ name: 'Sản phẩm', location: '/product' }];
 
 export const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -48,32 +47,52 @@ export const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={{
+        backgroundColor: '#fff',
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <CheckroomIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            NOS-STORE
-          </Typography>
-
+          <Link href="/">
+            <Box
+              sx={{
+                display: { xs: 'none', md: 'flex' },
+                flexDirection: 'row',
+              }}
+            >
+              <CheckroomIcon
+                sx={{
+                  display: { xs: 'none', md: 'flex' },
+                  mr: 1,
+                  color: '#000',
+                }}
+              />
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                href="/"
+                sx={{
+                  mr: 2,
+                  display: { xs: 'none', md: 'flex' },
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: '#000',
+                  textDecoration: 'none',
+                }}
+              >
+                NOS-STORE
+              </Typography>
+            </Box>
+          </Link>
           <Box
             sx={{
               flexGrow: 1,
               display: { xs: 'flex', md: 'none' },
+              color: '#000',
             }}
           >
             <IconButton
@@ -105,31 +124,51 @@ export const Navbar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
+                  <Link href={page.location}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <CheckroomIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            NOS-STORE
-          </Typography>
+
+          <Link href="/">
+            <Box
+              sx={{
+                display: { xs: 'flex', md: 'none' },
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <CheckroomIcon
+                sx={{
+                  display: { xs: 'flex', md: 'none' },
+                  mr: 1,
+                  color: '#000',
+                }}
+              />
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href=""
+                sx={{
+                  mr: 2,
+                  display: { xs: 'flex', md: 'none' },
+                  flexGrow: 1,
+                  fontFamily: 'monospace',
+                  fontWeight: 700,
+                  letterSpacing: '.3rem',
+                  color: '#000',
+                  textDecoration: 'none',
+                }}
+              >
+                NOS-STORE
+              </Typography>
+            </Box>
+          </Link>
           <Box
             sx={{
               flexGrow: 1,
@@ -137,13 +176,14 @@ export const Navbar = () => {
             }}
           >
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
+              <Link key={page.name} href={page.location}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: '#000', display: 'block' }}
+                >
+                  {page.name}
+                </Button>
+              </Link>
             ))}
           </Box>
 
