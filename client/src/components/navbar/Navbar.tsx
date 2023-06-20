@@ -55,13 +55,14 @@ export const Navbar = () => {
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link href="/">
-            <Box
-              sx={{
-                display: { xs: 'none', md: 'flex' },
-                flexDirection: 'row',
-              }}
-            >
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'flex' },
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            <Link href="/">
               <CheckroomIcon
                 sx={{
                   display: { xs: 'none', md: 'flex' },
@@ -69,16 +70,17 @@ export const Navbar = () => {
                   color: '#000',
                 }}
               />
+            </Link>
+            <Link href="/">
               <Typography
                 variant="h6"
                 noWrap
-                component="a"
-                href="/"
                 sx={{
                   mr: 2,
                   display: { xs: 'none', md: 'flex' },
                   fontFamily: 'monospace',
                   fontWeight: 700,
+                  flexGrow: 1,
                   letterSpacing: '.3rem',
                   color: '#000',
                   textDecoration: 'none',
@@ -86,8 +88,8 @@ export const Navbar = () => {
               >
                 NOS-STORE
               </Typography>
-            </Box>
-          </Link>
+            </Link>
+          </Box>
           <Box
             sx={{
               flexGrow: 1,
@@ -132,16 +134,16 @@ export const Navbar = () => {
               ))}
             </Menu>
           </Box>
-
-          <Link href="/">
-            <Box
-              sx={{
-                display: { xs: 'flex', md: 'none' },
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
+          {/* Logo responsive */}
+          <Box
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Link href="/">
               <CheckroomIcon
                 sx={{
                   display: { xs: 'flex', md: 'none' },
@@ -149,11 +151,11 @@ export const Navbar = () => {
                   color: '#000',
                 }}
               />
+            </Link>
+            <Link href="/">
               <Typography
                 variant="h5"
                 noWrap
-                component="a"
-                href=""
                 sx={{
                   mr: 2,
                   display: { xs: 'flex', md: 'none' },
@@ -167,8 +169,9 @@ export const Navbar = () => {
               >
                 NOS-STORE
               </Typography>
-            </Box>
-          </Link>
+            </Link>
+          </Box>
+
           <Box
             sx={{
               flexGrow: 1,
